@@ -16,6 +16,13 @@
 		E951E7592BCD7A2800E55A35 /* nfseeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E951E7582BCD7A2800E55A35 /* nfseeTests.swift */; };
 		E951E7632BCD7A2800E55A35 /* nfseeUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E951E7622BCD7A2800E55A35 /* nfseeUITests.swift */; };
 		E951E7652BCD7A2800E55A35 /* nfseeUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E951E7642BCD7A2800E55A35 /* nfseeUITestsLaunchTests.swift */; };
+		E951E7762BCD8AD500E55A35 /* PasswordItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = E951E7752BCD8AD500E55A35 /* PasswordItem.swift */; };
+		E951E7782BCD8B3500E55A35 /* AddPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E951E7772BCD8B3500E55A35 /* AddPasswordView.swift */; };
+		E951E77A2BCD8B6300E55A35 /* PasswordListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E951E7792BCD8B6300E55A35 /* PasswordListViewModel.swift */; };
+		E951E77C2BCD8B7600E55A35 /* AddPasswordViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E951E77B2BCD8B7500E55A35 /* AddPasswordViewModel.swift */; };
+		E951E77E2BCD8B8F00E55A35 /* NFCServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = E951E77D2BCD8B8F00E55A35 /* NFCServices.swift */; };
+		E951E7802BCD8BA000E55A35 /* EncryptionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E951E77F2BCD8BA000E55A35 /* EncryptionService.swift */; };
+		E951E7822BCD8BB400E55A35 /* CoreDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E951E7812BCD8BB400E55A35 /* CoreDataService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,6 +55,13 @@
 		E951E75E2BCD7A2800E55A35 /* nfseeUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = nfseeUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E951E7622BCD7A2800E55A35 /* nfseeUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = nfseeUITests.swift; sourceTree = "<group>"; };
 		E951E7642BCD7A2800E55A35 /* nfseeUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = nfseeUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		E951E7752BCD8AD500E55A35 /* PasswordItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordItem.swift; sourceTree = "<group>"; };
+		E951E7772BCD8B3500E55A35 /* AddPasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPasswordView.swift; sourceTree = "<group>"; };
+		E951E7792BCD8B6300E55A35 /* PasswordListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordListViewModel.swift; sourceTree = "<group>"; };
+		E951E77B2BCD8B7500E55A35 /* AddPasswordViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPasswordViewModel.swift; sourceTree = "<group>"; };
+		E951E77D2BCD8B8F00E55A35 /* NFCServices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NFCServices.swift; sourceTree = "<group>"; };
+		E951E77F2BCD8BA000E55A35 /* EncryptionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncryptionService.swift; sourceTree = "<group>"; };
+		E951E7812BCD8BB400E55A35 /* CoreDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,6 +92,10 @@
 		E951E7362BCD7A2600E55A35 = {
 			isa = PBXGroup;
 			children = (
+				E951E7712BCD8A8E00E55A35 /* models */,
+				E951E7732BCD8A8E00E55A35 /* services */,
+				E951E7722BCD8A8E00E55A35 /* view_models */,
+				E951E7742BCD8A8E00E55A35 /* views */,
 				E951E7412BCD7A2600E55A35 /* nfsee */,
 				E951E7572BCD7A2800E55A35 /* nfseeTests */,
 				E951E7612BCD7A2800E55A35 /* nfseeUITests */,
@@ -98,10 +116,7 @@
 		E951E7412BCD7A2600E55A35 /* nfsee */ = {
 			isa = PBXGroup;
 			children = (
-				E951E7422BCD7A2600E55A35 /* nfseeApp.swift */,
-				E951E7442BCD7A2600E55A35 /* ContentView.swift */,
 				E951E7462BCD7A2800E55A35 /* Assets.xcassets */,
-				E951E74B2BCD7A2800E55A35 /* Persistence.swift */,
 				E951E74D2BCD7A2800E55A35 /* nfsee.xcdatamodeld */,
 				E951E7482BCD7A2800E55A35 /* Preview Content */,
 			);
@@ -131,6 +146,44 @@
 				E951E7642BCD7A2800E55A35 /* nfseeUITestsLaunchTests.swift */,
 			);
 			path = nfseeUITests;
+			sourceTree = "<group>";
+		};
+		E951E7712BCD8A8E00E55A35 /* models */ = {
+			isa = PBXGroup;
+			children = (
+				E951E7752BCD8AD500E55A35 /* PasswordItem.swift */,
+			);
+			path = models;
+			sourceTree = "<group>";
+		};
+		E951E7722BCD8A8E00E55A35 /* view_models */ = {
+			isa = PBXGroup;
+			children = (
+				E951E7792BCD8B6300E55A35 /* PasswordListViewModel.swift */,
+				E951E77B2BCD8B7500E55A35 /* AddPasswordViewModel.swift */,
+			);
+			path = view_models;
+			sourceTree = "<group>";
+		};
+		E951E7732BCD8A8E00E55A35 /* services */ = {
+			isa = PBXGroup;
+			children = (
+				E951E74B2BCD7A2800E55A35 /* Persistence.swift */,
+				E951E7422BCD7A2600E55A35 /* nfseeApp.swift */,
+				E951E77D2BCD8B8F00E55A35 /* NFCServices.swift */,
+				E951E77F2BCD8BA000E55A35 /* EncryptionService.swift */,
+				E951E7812BCD8BB400E55A35 /* CoreDataService.swift */,
+			);
+			path = services;
+			sourceTree = "<group>";
+		};
+		E951E7742BCD8A8E00E55A35 /* views */ = {
+			isa = PBXGroup;
+			children = (
+				E951E7442BCD7A2600E55A35 /* ContentView.swift */,
+				E951E7772BCD8B3500E55A35 /* AddPasswordView.swift */,
+			);
+			path = views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -263,10 +316,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E951E7802BCD8BA000E55A35 /* EncryptionService.swift in Sources */,
 				E951E74C2BCD7A2800E55A35 /* Persistence.swift in Sources */,
 				E951E7452BCD7A2600E55A35 /* ContentView.swift in Sources */,
 				E951E7432BCD7A2600E55A35 /* nfseeApp.swift in Sources */,
+				E951E7762BCD8AD500E55A35 /* PasswordItem.swift in Sources */,
+				E951E77E2BCD8B8F00E55A35 /* NFCServices.swift in Sources */,
 				E951E74F2BCD7A2800E55A35 /* nfsee.xcdatamodeld in Sources */,
+				E951E77C2BCD8B7600E55A35 /* AddPasswordViewModel.swift in Sources */,
+				E951E7822BCD8BB400E55A35 /* CoreDataService.swift in Sources */,
+				E951E7782BCD8B3500E55A35 /* AddPasswordView.swift in Sources */,
+				E951E77A2BCD8B6300E55A35 /* PasswordListViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
