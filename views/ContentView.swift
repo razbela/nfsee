@@ -1,10 +1,3 @@
-//
-//  ContentView.swift
-//  nfsee
-//
-//  Created by Raz Belahusky on 15/04/2024.
-//
-
 import SwiftUI
 import CoreData
 
@@ -12,6 +5,7 @@ struct ContentView: View {
     @Environment(\.managedObjectContext) private var viewContext
 
     @FetchRequest(
+        entity: Item.entity(),
         sortDescriptors: [NSSortDescriptor(keyPath: \Item.timestamp, ascending: true)],
         animation: .default)
     private var items: FetchedResults<Item>
@@ -23,7 +17,14 @@ struct ContentView: View {
                     NavigationLink {
                         Text("Item at \(item.timestamp!, formatter: itemFormatter)")
                     } label: {
-                        Text(item.timestamp!, formatter: itemFormatter)
+                        HStack {
+                            VStack(alignment: .leading) {
+                                Text(item.title ?? "Untitled")
+                                Text(item.username ?? "No username")
+                            }
+                            Spacer()
+                            Image(systemName: item.isDecrypted ? "lock.open" : "lock.fill")
+                        }
                     }
                 }
                 .onDelete(perform: deleteItems)
@@ -46,12 +47,14 @@ struct ContentView: View {
         withAnimation {
             let newItem = Item(context: viewContext)
             newItem.timestamp = Date()
+            newItem.title = "New Item"
+            newItem.username = "Username"
+            newItem.logoName = "defaultLogo"
+            newItem.isDecrypted = false
 
             do {
                 try viewContext.save()
             } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
                 let nsError = error as NSError
                 fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
             }
@@ -65,8 +68,6 @@ struct ContentView: View {
             do {
                 try viewContext.save()
             } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
                 let nsError = error as NSError
                 fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
             }
@@ -80,7 +81,3 @@ private let itemFormatter: DateFormatter = {
     formatter.timeStyle = .medium
     return formatter
 }()
-
-#Preview {
-    ContentView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
-}
