@@ -1,83 +1,41 @@
 import SwiftUI
-import CoreData
 
 struct ContentView: View {
-    @Environment(\.managedObjectContext) private var viewContext
-
-    @FetchRequest(
-        entity: Item.entity(),
-        sortDescriptors: [NSSortDescriptor(keyPath: \Item.timestamp, ascending: true)],
-        animation: .default)
-    private var items: FetchedResults<Item>
-
+    @State private var passwords = [PasswordItem]()
+    @State private var showingAddPasswordView = false
+    @State private var isEditing = false
+    
     var body: some View {
         NavigationView {
             List {
-                ForEach(items) { item in
-                    NavigationLink {
-                        Text("Item at \(item.timestamp!, formatter: itemFormatter)")
-                    } label: {
-                        HStack {
-                            VStack(alignment: .leading) {
-                                Text(item.title ?? "title")
-                                Text(item.username ?? "username")
-                            }
-                            Spacer()
-                            Image(systemName: item.isDecrypted ? "lock.open" : "lock.fill")
-                        }
+                ForEach(passwords) { password in
+                    VStack(alignment: .leading) {
+                        Text(password.title)
+                            .font(.headline)
+                        Text(password.username)
+                            .font(.subheadline)
                     }
                 }
-                .onDelete(perform: deleteItems)
+                .onDelete(perform: deletePasswords)
+                .onMove(perform: movePasswords)
             }
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    EditButton()
-                }
-                ToolbarItem {
-                    Button(action: addItem) {
-                        Label("Add Item", systemImage: "plus")
-                    }
-                }
+            .navigationTitle("Passwords")
+            .navigationBarItems( leading: EditButton(),
+                                 trailing: Button(action: {
+                showingAddPasswordView = true
+            }) {
+                Image(systemName: "plus")
             }
-            Text("Select an item")
+            .sheet(isPresented: $showingAddPasswordView) {
+                AddPasswordView(passwords: $passwords)
+            })
         }
     }
-
-    private func addItem() {
-        withAnimation {
-            let newItem = Item(context: viewContext)
-            newItem.timestamp = Date()
-            newItem.title = "New Item"
-            newItem.username = "Username"
-            newItem.logoName = "defaultLogo"
-            newItem.isDecrypted = false
-
-            do {
-                try viewContext.save()
-            } catch {
-                let nsError = error as NSError
-                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
-            }
-        }
-    }
-
-    private func deleteItems(offsets: IndexSet) {
-        withAnimation {
-            offsets.map { items[$0] }.forEach(viewContext.delete)
-
-            do {
-                try viewContext.save()
-            } catch {
-                let nsError = error as NSError
-                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
-            }
-        }
-    }
+    private func deletePasswords(at offsets: IndexSet) {
+           passwords.remove(atOffsets: offsets)
+       }
+       
+       private func movePasswords(from source: IndexSet, to destination: Int) {
+           passwords.move(fromOffsets: source, toOffset: destination)
+       }
 }
-
-private let itemFormatter: DateFormatter = {
-    let formatter = DateFormatter()
-    formatter.dateStyle = .short
-    formatter.timeStyle = .medium
-    return formatter
-}()
