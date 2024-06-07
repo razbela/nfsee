@@ -19,8 +19,8 @@ struct ContentView: View {
                     } label: {
                         HStack {
                             VStack(alignment: .leading) {
-                                Text(item.title ?? "Untitled")
-                                Text(item.username ?? "No username")
+                                Text(item.title ?? "title")
+                                Text(item.username ?? "username")
                             }
                             Spacer()
                             Image(systemName: item.isDecrypted ? "lock.open" : "lock.fill")
