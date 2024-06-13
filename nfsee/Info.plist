@@ -2,14 +2,14 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>NSAppTransportSecurity</key>
-	<dict/>
-	<key>NSNFCReaderUsageDescription</key>
-	<string>We need access to NFC to read and write keys.</string>
-	<key>UIBackgroundModes</key>
-	<array>
-		<string>audio</string>
-		<string>bluetooth-central</string>
-	</array>
+    <key>com.apple.developer.nfc.readersession.formats</key>
+    <array>
+        <string>NDEF</string>
+        <string>TAG</string>
+    </array>
+    <key>NFCReaderUsageDescription</key>
+    <string>This app uses NFC to interact with NFC tags.</string>
+    <key>com.apple.external-accessory.wireless-configuration</key>
+    <true/>
 </dict>
 </plist>

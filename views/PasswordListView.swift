@@ -1,6 +1,4 @@
-<<<<<<< HEAD
 import SwiftUI
-
 struct PasswordListView: View {
     @EnvironmentObject var nfcViewModel: NFCViewModel
     @StateObject private var viewModel = PasswordListViewModel()

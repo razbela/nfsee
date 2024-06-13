@@ -2,15 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-<<<<<<< HEAD
-	<key>com.apple.developer.nfc.readersession.formats</key>
-	<array>
-		<string>NDEF</string>
-		<string>TAG</string>
-	</array>
-=======
-	<key>com.apple.external-accessory.wireless-configuration</key>
-	<true/>
->>>>>>> b07904a8d5c206e86df32b5b17f0c4878be5a29b
+    <key>com.apple.developer.nfc.readersession.formats</key>
+    <array>
+        <string>NDEF</string>
+        <string>TAG</string>
+    </array>
 </dict>
 </plist>
