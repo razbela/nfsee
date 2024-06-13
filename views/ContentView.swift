@@ -1,41 +1,28 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var passwords = [PasswordItem]()
-    @State private var showingAddPasswordView = false
-    @State private var isEditing = false
+    @StateObject private var viewModel = NFCViewModel()
     
     var body: some View {
         NavigationView {
-            List {
-                ForEach(passwords) { password in
-                    VStack(alignment: .leading) {
-                        Text(password.title)
-                            .font(.headline)
-                        Text(password.username)
-                            .font(.subheadline)
+            VStack {
+                if viewModel.navigateToPasswordList {
+                    PasswordListView()
+                        .environmentObject(viewModel)
+                } else {
+                    VStack {
+                        Text("NFC INIT")
+                            .font(.largeTitle)
+                            .padding()
+                    }
+                    .onAppear {
+                        viewModel.startNFCSession()
                     }
                 }
-                .onDelete(perform: deletePasswords)
-                .onMove(perform: movePasswords)
             }
-            .navigationTitle("Passwords")
-            .navigationBarItems( leading: EditButton(),
-                                 trailing: Button(action: {
-                showingAddPasswordView = true
-            }) {
-                Image(systemName: "plus")
+            .alert(isPresented: $viewModel.showAlert) {
+                Alert(title: Text("NFC Operation"), message: Text(viewModel.alertMessage), dismissButton: .default(Text("OK")))
             }
-            .sheet(isPresented: $showingAddPasswordView) {
-                AddPasswordView(passwords: $passwords)
-            })
         }
     }
-    private func deletePasswords(at offsets: IndexSet) {
-           passwords.remove(atOffsets: offsets)
-       }
-       
-       private func movePasswords(from source: IndexSet, to destination: Int) {
-           passwords.move(fromOffsets: source, toOffset: destination)
-       }
 }

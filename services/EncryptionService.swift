@@ -1,17 +1,30 @@
 import Foundation
 import CommonCrypto
+import CryptoKit
 
 class EncryptionService {
     
-    // Encrypt data using AES
-    static func encrypt(data: Data, key: Data) throws -> Data {
-        return try crypt(data: data, key: key, operation: kCCEncrypt)
-    }
-    
-    // Decrypt data using AES
-    static func decrypt(data: Data, key: Data) throws -> Data {
-        return try crypt(data: data, key: key, operation: kCCDecrypt)
-    }
+    func encrypt(data: Data, key: SymmetricKey) -> Data? {
+            do {
+                let sealedBox = try AES.GCM.seal(data, using: key)
+                return sealedBox.combined
+            } catch {
+                print("Encryption failed: \(error.localizedDescription)")
+                return nil
+            }
+        }
+        
+        func decrypt(data: Data, key: SymmetricKey) -> Data? {
+            do {
+                let sealedBox = try AES.GCM.SealedBox(combined: data)
+                let decryptedData = try AES.GCM.open(sealedBox, using: key)
+                return decryptedData
+            } catch {
+                print("Decryption failed: \(error.localizedDescription)")
+                return nil
+            }
+        }
+
     
     private static func crypt(data: Data, key: Data, operation: Int) throws -> Data {
         var outLength = Int(0)

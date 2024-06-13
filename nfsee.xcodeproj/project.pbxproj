@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E91B0B952C1B0F3B009FB9B3 /* NFCViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E91B0B942C1B0F3B009FB9B3 /* NFCViewModel.swift */; };
+		E91B0B972C1B1424009FB9B3 /* PasswordListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E91B0B962C1B1424009FB9B3 /* PasswordListView.swift */; };
 		E951E7432BCD7A2600E55A35 /* nfseeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E951E7422BCD7A2600E55A35 /* nfseeApp.swift */; };
 		E951E7452BCD7A2600E55A35 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E951E7442BCD7A2600E55A35 /* ContentView.swift */; };
 		E951E7472BCD7A2800E55A35 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E951E7462BCD7A2800E55A35 /* Assets.xcassets */; };
@@ -52,6 +54,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		E90D7B142C15B00300B99884 /* nfseeDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = nfseeDebug.entitlements; sourceTree = "<group>"; };
+		E91B0B942C1B0F3B009FB9B3 /* NFCViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NFCViewModel.swift; sourceTree = "<group>"; };
+		E91B0B962C1B1424009FB9B3 /* PasswordListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordListView.swift; sourceTree = "<group>"; };
 		E951E73F2BCD7A2600E55A35 /* nfsee.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = nfsee.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E951E7422BCD7A2600E55A35 /* nfseeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = nfseeApp.swift; sourceTree = "<group>"; };
 		E951E7442BCD7A2600E55A35 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -80,6 +85,7 @@
 		E9A221F92C134F63000F5004 /* dataController.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = dataController.py; sourceTree = "<group>"; };
 		E9A221FB2C134F76000F5004 /* secretModel.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = secretModel.py; sourceTree = "<group>"; };
 		E9A221FD2C134F8A000F5004 /* vaultConfig.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = vaultConfig.py; sourceTree = "<group>"; };
+		E9D2C00F2C14EC58009DFC25 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -135,6 +141,8 @@
 		E951E7412BCD7A2600E55A35 /* nfsee */ = {
 			isa = PBXGroup;
 			children = (
+				E90D7B142C15B00300B99884 /* nfseeDebug.entitlements */,
+				E9D2C00F2C14EC58009DFC25 /* Info.plist */,
 				E951E7462BCD7A2800E55A35 /* Assets.xcassets */,
 				E951E74D2BCD7A2800E55A35 /* nfsee.xcdatamodeld */,
 				E951E7482BCD7A2800E55A35 /* Preview Content */,
@@ -181,6 +189,7 @@
 			children = (
 				E951E7792BCD8B6300E55A35 /* PasswordListViewModel.swift */,
 				E951E77B2BCD8B7500E55A35 /* AddPasswordViewModel.swift */,
+				E91B0B942C1B0F3B009FB9B3 /* NFCViewModel.swift */,
 			);
 			path = view_models;
 			sourceTree = "<group>";
@@ -203,6 +212,7 @@
 			children = (
 				E951E7442BCD7A2600E55A35 /* ContentView.swift */,
 				E951E7772BCD8B3500E55A35 /* AddPasswordView.swift */,
+				E91B0B962C1B1424009FB9B3 /* PasswordListView.swift */,
 			);
 			path = views;
 			sourceTree = "<group>";
@@ -390,6 +400,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E91B0B952C1B0F3B009FB9B3 /* NFCViewModel.swift in Sources */,
 				E951E7802BCD8BA000E55A35 /* EncryptionService.swift in Sources */,
 				E951E74C2BCD7A2800E55A35 /* Persistence.swift in Sources */,
 				E951E7452BCD7A2600E55A35 /* ContentView.swift in Sources */,
@@ -401,6 +412,7 @@
 				E951E77C2BCD8B7600E55A35 /* AddPasswordViewModel.swift in Sources */,
 				E951E7822BCD8BB400E55A35 /* CoreDataService.swift in Sources */,
 				E951E7782BCD8B3500E55A35 /* AddPasswordView.swift in Sources */,
+				E91B0B972C1B1424009FB9B3 /* PasswordListView.swift in Sources */,
 				E9A221E92C134B59000F5004 /* NetworkService.swift in Sources */,
 				E951E77A2BCD8B6300E55A35 /* PasswordListViewModel.swift in Sources */,
 			);
@@ -563,12 +575,16 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = nfsee/nfseeDebug.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"nfsee/Preview Content\"";
 				DEVELOPMENT_TEAM = 7LHLYT946T;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = nfsee/Info.plist;
+				INFOPLIST_KEY_NFCReaderUsageDescription = "<key>NSNFCReaderUsageDescription</key>\n<string>We need access to NFC to read and write keys.</string>\n";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -581,6 +597,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "-.nfsee";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -592,12 +609,16 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = nfsee/nfseeDebug.entitlements;
+				"CODE_SIGN_ENTITLEMENTS[sdk=*]" = "";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"nfsee/Preview Content\"";
 				DEVELOPMENT_TEAM = 7LHLYT946T;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = nfsee/Info.plist;
+				INFOPLIST_KEY_NFCReaderUsageDescription = "<key>NSNFCReaderUsageDescription</key>\n<string>We need access to NFC to read and write keys.</string>\n";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
