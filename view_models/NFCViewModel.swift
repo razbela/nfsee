@@ -4,39 +4,33 @@ import Combine
 import CryptoKit
 
 class NFCViewModel: ObservableObject {
-    @Published var isKeyWritten = false
-    @Published var keyData: String?
-    @Published var showAlert = false {
-        didSet {
-            if showAlert {
-                print("Alert is set to show with message: \(alertMessage)")
-            } else {
-                print("Alert is not showing")
-            }
-        }
-    }
+    @Published var showAlert = false
     @Published var alertMessage = ""
     @Published var navigateToPasswordList = false
     
     private var nfcService = NFCService()
     
-    func startNFCSession() {
-        DispatchQueue.main.async {
-            self.nfcService.startSession { [weak self] keyData in
-                DispatchQueue.main.async {
-                    if let keyData = keyData {
-                        print("NFC Key Data: \(keyData.base64EncodedString())")
-                        self?.keyData = keyData.base64EncodedString()
-                        self?.alertMessage = "Key written successfully: \(self?.keyData ?? "")"
-                        self?.isKeyWritten = true
-                        self?.navigateToPasswordList = true
-                        self?.showAlert = false  // Explicitly set to false on success
-                    } else {
-                        print("NFC Key Data is nil")
-                        self?.alertMessage = "Failed to write key to NFC."
-                        self?.showAlert = true
-                    }
-                }
+    init() {}
+    
+    func startNFCSession(writing: Bool, completion: @escaping (Data?) -> Void) {
+        nfcService.startSession(prompt: true, writing: writing) { [weak self] keyData in
+            DispatchQueue.main.async {
+                completion(keyData)
+            }
+        }
+    }
+    
+    func writeKeyToNFC() {
+        startNFCSession(writing: true) { [weak self] keyData in
+            guard let self = self else { return }
+            if let keyData = keyData {
+                UserDefaults.standard.set(true, forKey: "keyWritten")
+                self.alertMessage = "Key successfully written to NFC."
+                self.navigateToPasswordList = true
+                print("Key written to NFC: \(keyData.base64EncodedString())")
+            } else {
+                self.alertMessage = "Failed to write key to NFC."
+                self.showAlert = true
             }
         }
     }

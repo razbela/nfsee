@@ -1,39 +1,47 @@
 import SwiftUI
+
 struct PasswordListView: View {
+    @EnvironmentObject var passwordListViewModel: PasswordListViewModel
     @EnvironmentObject var nfcViewModel: NFCViewModel
-    @StateObject private var viewModel = PasswordListViewModel()
     @State private var showingAddPasswordView = false
 
     var body: some View {
-        NavigationView {
+        VStack {
             List {
-                ForEach(viewModel.passwords) { password in
+                ForEach(passwordListViewModel.passwords) { password in
                     VStack(alignment: .leading) {
                         Text(password.title)
                             .font(.headline)
                         Text(password.username)
                             .font(.subheadline)
                     }
+                    .padding()
+                    .background(password.isDecrypted ? Color.green.opacity(0.3) : Color.red.opacity(0.3))
+                    .cornerRadius(10)
                 }
-                .onDelete(perform: viewModel.deletePasswords)
-                .onMove(perform: viewModel.movePasswords)
+                .onDelete(perform: passwordListViewModel.deletePasswords)
+                .onMove(perform: passwordListViewModel.movePasswords)
             }
             .navigationTitle("Passwords")
-            .navigationBarItems(leading: EditButton(), trailing: Button(action: {
-                showingAddPasswordView = true
-            }) {
-                Image(systemName: "plus")
+            .navigationBarItems(leading: EditButton(), trailing: HStack {
+                Button(action: {
+                    showingAddPasswordView = true
+                }) {
+                    Image(systemName: "plus")
+                }
+                Button(action: {
+                    passwordListViewModel.toggleNFCListening()
+                }) {
+                    Image(systemName: passwordListViewModel.isListening ? "lock.open" : "lock")
+                }
             })
             .sheet(isPresented: $showingAddPasswordView) {
-                AddPasswordView(viewModel: viewModel)
+                let addPasswordViewModel = AddPasswordViewModel(delegate: passwordListViewModel)
+                AddPasswordView(viewModel: addPasswordViewModel)
             }
         }
-        .alert(isPresented: $viewModel.showAlert) {
-            Alert(title: Text("Message"), message: Text(viewModel.alertMessage), dismissButton: .default(Text("OK")))
-        }
-        .onAppear {
-            // Access nfcViewModel.keyData here if needed
-            print("NFC Key Data: \(nfcViewModel.keyData ?? "No Key Data")")
+        .alert(isPresented: $passwordListViewModel.showAlert) {
+            Alert(title: Text("Message"), message: Text(passwordListViewModel.alertMessage), dismissButton: .default(Text("OK")))
         }
     }
 }
