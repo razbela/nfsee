@@ -11,20 +11,37 @@ struct PasswordListView: View {
             VStack {
                 List {
                     ForEach(passwordListViewModel.passwords) { password in
-                        VStack(alignment: .leading) {
-                            Text(password.title)
-                                .font(.headline)
-                            Text(password.username)
-                                .font(.subheadline)
+                        HStack {
+                            VStack(alignment: .leading) {
+                                Text(password.title)
+                                    .font(.headline)
+                                Text(password.username)
+                                    .font(.subheadline)
+                            }
+                            Spacer()
+                            Button(action: {
+                                copyPasswordToClipboard(password)
+                            }) {
+                                Image(systemName: "document.on.document.fill")
+                                    .foregroundColor(.white)
+                                    .font(.system(size: 24))
+                                    .padding(.trailing, 15)
+                            }
+                            .buttonStyle(PlainButtonStyle())
+                            Button(action: {
+                                passwordListViewModel.toggleEncryption(for: password)
+                            }) {
+                                Image(systemName: password.isDecrypted ? "lock.open.fill" : "lock.fill")
+                                    .foregroundColor(password.isDecrypted ? Color.green : Color.red)
+                                    .font(.system(size: 24))
+                                    .padding(.trailing, 2)
+                            }
+                            .buttonStyle(PlainButtonStyle())
                         }
                         .padding()
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .background(password.isDecrypted ? Color.green.opacity(0.3) : Color.red.opacity(0.3))
-                        .cornerRadius(10)
-                        .onTapGesture {
-                            copyPasswordToClipboard(password)
-                        }
                         .background(copiedPassword == password.password ? Color.gray.opacity(0.5) : Color.clear)
+                        .background(Color.black.opacity(0.7))
+                        .contentShape(Rectangle()) // Ensures that only the buttons are clickable
                     }
                     .onDelete(perform: passwordListViewModel.deletePasswords)
                     .onMove(perform: passwordListViewModel.movePasswords)
@@ -36,11 +53,6 @@ struct PasswordListView: View {
                     }) {
                         Image(systemName: "plus")
                     }
-                    Button(action: {
-                        passwordListViewModel.toggleNFCListening()
-                    }) {
-                        Image(systemName: passwordListViewModel.isDecrypted ? "lock.open" : "lock")
-                    }
                 })
                 .sheet(isPresented: $showingAddPasswordView) {
                     let addPasswordViewModel = AddPasswordViewModel(delegate: passwordListViewModel)
@@ -51,7 +63,6 @@ struct PasswordListView: View {
                 Alert(title: Text("Message"), message: Text(passwordListViewModel.alertMessage), dismissButton: .default(Text("OK")))
             }
             
-            // Footer alert
             if let copiedPassword = copiedPassword {
                 VStack {
                     Spacer()

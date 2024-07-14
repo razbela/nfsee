@@ -1,4 +1,3 @@
-import Foundation
 import SwiftUI
 import CryptoKit
 
@@ -7,7 +6,6 @@ class PasswordListViewModel: ObservableObject, PasswordListDelegate {
     @Published var showAlert = false
     @Published var alertMessage = ""
     @Published var isListening = false
-    @Published var isDecrypted = false
     private var nfcService = NFCService()
     private var encryptionService = EncryptionService()
     
@@ -43,41 +41,42 @@ class PasswordListViewModel: ObservableObject, PasswordListDelegate {
     }
 
     func deletePasswords(at offsets: IndexSet) {
-        DispatchQueue.main.async {
-            self.passwords.remove(atOffsets: offsets)
+            passwords.remove(atOffsets: offsets)
         }
-    }
 
     func movePasswords(from source: IndexSet, to destination: Int) {
-        DispatchQueue.main.async {
-            self.passwords.move(fromOffsets: source, toOffset: destination)
+            passwords.move(fromOffsets: source, toOffset: destination)
         }
-    }
-
-    func toggleNFCListening() {
-        if isListening {
-            nfcService.stopSession()
-            DispatchQueue.main.async {
-                self.isListening.toggle()
-            }
-        } else {
-            startNFCSession(writing: false) { [weak self] keyData, _ in
-                guard let self = self, let keyData = keyData else {
-                    DispatchQueue.main.async {
-                        self?.alertMessage = "Failed to read key from NFC."
-                        self?.showAlert = true
-                    }
-                    return
-                }
-                print("Key read from NFC: \(keyData.base64EncodedString())")
-                if self.isDecrypted {
-                    self.encryptPasswords(with: keyData)
-                } else {
-                    self.decryptPasswords(with: keyData)
-                }
+    
+    func toggleEncryption(for password: PasswordItem) {
+        startNFCSession(writing: false) { [weak self] keyData, _ in
+            guard let self = self, let keyData = keyData else {
                 DispatchQueue.main.async {
-                    self.isDecrypted.toggle()
-                    self.isListening.toggle()
+                    self?.alertMessage = "Failed to read key from NFC."
+                    self?.showAlert = true
+                }
+                return
+            }
+            let key = SymmetricKey(data: keyData)
+            if password.isDecrypted {
+                if let decryptedData = password.password.data(using: .utf8),
+                   let encryptedData = self.encryptionService.encrypt(data: decryptedData, key: key) {
+                    DispatchQueue.main.async {
+                        if let index = self.passwords.firstIndex(of: password) {
+                            self.passwords[index].password = encryptedData.base64EncodedString()
+                            self.passwords[index].isDecrypted = false
+                        }
+                    }
+                }
+            } else {
+                if let encryptedData = Data(base64Encoded: password.password),
+                   let decryptedData = self.encryptionService.decrypt(data: encryptedData, key: key) {
+                    DispatchQueue.main.async {
+                        if let index = self.passwords.firstIndex(of: password) {
+                            self.passwords[index].password = String(data: decryptedData, encoding: .utf8) ?? "Decryption failed"
+                            self.passwords[index].isDecrypted = true
+                        }
+                    }
                 }
             }
         }
@@ -86,31 +85,5 @@ class PasswordListViewModel: ObservableObject, PasswordListDelegate {
     private func startNFCSession(writing: Bool, completion: @escaping (Data?, String?) -> Void) {
         print("Starting NFC session - Writing: \(writing)")
         nfcService.startSession(prompt: true, writing: writing, completion: completion)
-    }
-
-    private func decryptPasswords(with keyData: Data) {
-        let key = SymmetricKey(data: keyData)
-        for (index, password) in passwords.enumerated() {
-            if let encryptedData = Data(base64Encoded: password.password),
-               let decryptedData = encryptionService.decrypt(data: encryptedData, key: key) {
-                DispatchQueue.main.async {
-                    self.passwords[index].password = String(data: decryptedData, encoding: .utf8) ?? "Decryption failed"
-                    self.passwords[index].isDecrypted = true
-                }
-            }
-        }
-    }
-
-    private func encryptPasswords(with keyData: Data) {
-        let key = SymmetricKey(data: keyData)
-        for (index, password) in passwords.enumerated() {
-            if let decryptedData = password.password.data(using: .utf8),
-               let encryptedData = encryptionService.encrypt(data: decryptedData, key: key) {
-                DispatchQueue.main.async {
-                    self.passwords[index].password = encryptedData.base64EncodedString()
-                    self.passwords[index].isDecrypted = false
-                }
-            }
-        }
     }
 }
