@@ -1,14 +1,14 @@
-import Foundation
 import CoreNFC
 import CryptoKit
 
 class NFCService: NSObject, NFCTagReaderSessionDelegate {
-    var session: NFCTagReaderSession?
-    var completion: ((Data?) -> Void)?
+    private var session: NFCTagReaderSession?
+    private var completion: ((Data?, String?) -> Void)?
+
     private var completionCalled = false
     private var isWriting = false
     
-    func startSession(prompt: Bool, writing: Bool, completion: @escaping (Data?) -> Void) {
+    func startSession(prompt: Bool, writing: Bool, completion: @escaping (Data?, String?) -> Void) {
         print("Starting NFC session - Writing: \(writing)")
         self.completion = completion
         self.completionCalled = false
@@ -16,7 +16,7 @@ class NFCService: NSObject, NFCTagReaderSessionDelegate {
         
         guard NFCTagReaderSession.readingAvailable else {
             print("NFC reading not available on this device.")
-            completion(nil)
+            completion(nil, nil)
             return
         }
         
@@ -30,7 +30,7 @@ class NFCService: NSObject, NFCTagReaderSessionDelegate {
             session.alertMessage = "No tags found. Please try again."
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                 session.invalidate(errorMessage: "No tags found.")
-                self.callCompletion(with: nil)
+                self.callCompletion(with: nil, uid: nil)
             }
             return
         }
@@ -40,7 +40,7 @@ class NFCService: NSObject, NFCTagReaderSessionDelegate {
                 session.alertMessage = "Connection failed. Please try again."
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                     session.invalidate(errorMessage: "Connection failed.")
-                    self.callCompletion(with: nil)
+                    self.callCompletion(with: nil, uid: nil)
                 }
                 return
             }
@@ -48,18 +48,19 @@ class NFCService: NSObject, NFCTagReaderSessionDelegate {
             switch tag {
             case .miFare(let miFareTag):
                 print("MIFARE tag detected")
-                self.isWriting ? self.writeToMiFareTag(miFareTag, session: session) : self.readKeyFromMiFareTag(miFareTag, session: session)
+                let uid = miFareTag.identifier.map { String(format: "%.2hhx", $0) }.joined()
+                self.isWriting ? self.writeToMiFareTag(miFareTag, uid: uid, session: session) : self.readKeyFromMiFareTag(miFareTag, uid: uid, session: session)
             default:
                 session.alertMessage = "Unsupported tag type."
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                     session.invalidate(errorMessage: "Unsupported tag.")
-                    self.callCompletion(with: nil)
+                    self.callCompletion(with: nil, uid: nil)
                 }
             }
         }
     }
     
-    private func writeToMiFareTag(_ tag: NFCMiFareTag, session: NFCTagReaderSession) {
+    private func writeToMiFareTag(_ tag: NFCMiFareTag, uid: String, session: NFCTagReaderSession) {
         let key = SymmetricKey(size: .bits256)
         let keyData = key.withUnsafeBytes { Data($0) }
         let payload = NFCNDEFPayload(format: .unknown, type: Data(), identifier: Data(), payload: keyData)
@@ -71,28 +72,28 @@ class NFCService: NSObject, NFCTagReaderSessionDelegate {
                 session.alertMessage = "Write failed. Please try again."
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                     session.invalidate(errorMessage: "Write failed.")
-                    self.callCompletion(with: nil)
+                    self.callCompletion(with: nil, uid: nil)
                 }
                 return
             }
             
             print("Successfully wrote key to tag.")
             session.alertMessage = "Write successful!"
-            self.callCompletion(with: keyData)
+            self.callCompletion(with: keyData, uid: uid)
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                 session.invalidate()
             }
         }
     }
     
-    private func readKeyFromMiFareTag(_ tag: NFCMiFareTag, session: NFCTagReaderSession) {
+    private func readKeyFromMiFareTag(_ tag: NFCMiFareTag, uid: String, session: NFCTagReaderSession) {
         tag.queryNDEFStatus { status, capacity, error in
             if let error = error {
                 print("Failed to query NDEF status: \(error.localizedDescription)")
                 session.alertMessage = "Failed to query NDEF status. Please try again."
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                     session.invalidate(errorMessage: "Failed to query NDEF status.")
-                    self.callCompletion(with: nil)
+                    self.callCompletion(with: nil, uid: nil)
                 }
                 return
             }
@@ -102,7 +103,7 @@ class NFCService: NSObject, NFCTagReaderSessionDelegate {
                 session.alertMessage = "NDEF not supported by this tag."
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                     session.invalidate(errorMessage: "NDEF not supported.")
-                    self.callCompletion(with: nil)
+                    self.callCompletion(with: nil, uid: nil)
                 }
             case .readOnly, .readWrite:
                 tag.readNDEF { message, error in
@@ -111,7 +112,7 @@ class NFCService: NSObject, NFCTagReaderSessionDelegate {
                         session.alertMessage = "Read failed. Please try again."
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                             session.invalidate(errorMessage: "Read failed.")
-                            self.callCompletion(with: nil)
+                            self.callCompletion(with: nil, uid: nil)
                         }
                         return
                     }
@@ -120,14 +121,14 @@ class NFCService: NSObject, NFCTagReaderSessionDelegate {
                         session.alertMessage = "No key found. Please try again."
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                             session.invalidate(errorMessage: "No key found.")
-                            self.callCompletion(with: nil)
+                            self.callCompletion(with: nil, uid: nil)
                         }
                         return
                     }
                     
                     print("Successfully read key from tag: \(keyData.base64EncodedString())")
                     session.alertMessage = "Read successful!"
-                    self.callCompletion(with: keyData)
+                    self.callCompletion(with: keyData, uid: uid)
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                         session.invalidate()
                     }
@@ -136,7 +137,7 @@ class NFCService: NSObject, NFCTagReaderSessionDelegate {
                 session.alertMessage = "Unknown NDEF status."
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                     session.invalidate(errorMessage: "Unknown NDEF status.")
-                    self.callCompletion(with: nil)
+                    self.callCompletion(with: nil, uid: nil)
                 }
             }
         }
@@ -148,14 +149,14 @@ class NFCService: NSObject, NFCTagReaderSessionDelegate {
     
     func tagReaderSession(_ session: NFCTagReaderSession, didInvalidateWithError error: Error) {
         print("NFC Session Invalidated: \(error.localizedDescription)")
-        self.callCompletion(with: nil)
+        self.callCompletion(with: nil, uid: nil)
     }
     
-    private func callCompletion(with data: Data?) {
+    private func callCompletion(with data: Data?, uid: String?) {
         guard !completionCalled else { return }
         completionCalled = true
         DispatchQueue.main.async {
-            self.completion?(data)
+            self.completion?(data, uid)
         }
     }
     

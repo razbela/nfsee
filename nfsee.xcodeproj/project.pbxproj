@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		E91B0B952C1B0F3B009FB9B3 /* NFCViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E91B0B942C1B0F3B009FB9B3 /* NFCViewModel.swift */; };
 		E91B0B972C1B1424009FB9B3 /* PasswordListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E91B0B962C1B1424009FB9B3 /* PasswordListView.swift */; };
 		E951E7432BCD7A2600E55A35 /* nfseeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E951E7422BCD7A2600E55A35 /* nfseeApp.swift */; };
 		E951E7452BCD7A2600E55A35 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E951E7442BCD7A2600E55A35 /* ContentView.swift */; };
@@ -26,15 +25,15 @@
 		E951E7802BCD8BA000E55A35 /* EncryptionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E951E77F2BCD8BA000E55A35 /* EncryptionService.swift */; };
 		E951E7822BCD8BB400E55A35 /* CoreDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E951E7812BCD8BB400E55A35 /* CoreDataService.swift */; };
 		E9998D292C38A5DB002E8D20 /* PasswordListDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9998D282C38A5DB002E8D20 /* PasswordListDelegate.swift */; };
+		E99FBE152C43F51300126E71 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E99FBE142C43F51300126E71 /* LoginView.swift */; };
+		E99FBE172C43F58F00126E71 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E99FBE162C43F58F00126E71 /* LoadingView.swift */; };
+		E99FBE192C43FD7A00126E71 /* RegisterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E99FBE182C43FD7A00126E71 /* RegisterView.swift */; };
+		E99FBE1B2C44028F00126E71 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = E99FBE1A2C44028F00126E71 /* Config.swift */; };
+		E99FBE1D2C4402C500126E71 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E99FBE1C2C4402C500126E71 /* SettingsView.swift */; };
+		E99FBE292C44135C00126E71 /* main.py in Resources */ = {isa = PBXBuildFile; fileRef = E99FBE282C44135C00126E71 /* main.py */; };
+		E99FBE2C2C4415F200126E71 /* NFCViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E91B0B942C1B0F3B009FB9B3 /* NFCViewModel.swift */; };
 		E9A221E72C134B3E000F5004 /* APIResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9A221E62C134B3E000F5004 /* APIResponse.swift */; };
 		E9A221E92C134B59000F5004 /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9A221E82C134B59000F5004 /* NetworkService.swift */; };
-		E9A221EC2C134DF8000F5004 /* server.py in Resources */ = {isa = PBXBuildFile; fileRef = E9A221EB2C134DF8000F5004 /* server.py */; };
-		E9A221F22C134E7B000F5004 /* authRoutes.py in Resources */ = {isa = PBXBuildFile; fileRef = E9A221F12C134E7B000F5004 /* authRoutes.py */; };
-		E9A221F62C134EDA000F5004 /* dataRoutes.py in Resources */ = {isa = PBXBuildFile; fileRef = E9A221F52C134EDA000F5004 /* dataRoutes.py */; };
-		E9A221F82C134F41000F5004 /* authController.py in Resources */ = {isa = PBXBuildFile; fileRef = E9A221F72C134F41000F5004 /* authController.py */; };
-		E9A221FA2C134F63000F5004 /* dataController.py in Resources */ = {isa = PBXBuildFile; fileRef = E9A221F92C134F63000F5004 /* dataController.py */; };
-		E9A221FC2C134F76000F5004 /* secretModel.py in Resources */ = {isa = PBXBuildFile; fileRef = E9A221FB2C134F76000F5004 /* secretModel.py */; };
-		E9A221FE2C134F8A000F5004 /* vaultConfig.py in Resources */ = {isa = PBXBuildFile; fileRef = E9A221FD2C134F8A000F5004 /* vaultConfig.py */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -78,6 +77,18 @@
 		E951E77F2BCD8BA000E55A35 /* EncryptionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncryptionService.swift; sourceTree = "<group>"; };
 		E951E7812BCD8BB400E55A35 /* CoreDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataService.swift; sourceTree = "<group>"; };
 		E9998D282C38A5DB002E8D20 /* PasswordListDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordListDelegate.swift; sourceTree = "<group>"; };
+		E99FBE142C43F51300126E71 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		E99FBE162C43F58F00126E71 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
+		E99FBE182C43FD7A00126E71 /* RegisterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterView.swift; sourceTree = "<group>"; };
+		E99FBE1A2C44028F00126E71 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
+		E99FBE1C2C4402C500126E71 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		E99FBE1E2C440DB900126E71 /* __init__.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = __init__.py; sourceTree = "<group>"; };
+		E99FBE202C440DBE00126E71 /* __init__.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = __init__.py; sourceTree = "<group>"; };
+		E99FBE222C440DC000126E71 /* __init__.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = __init__.py; sourceTree = "<group>"; };
+		E99FBE242C440DC700126E71 /* __init__.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = __init__.py; sourceTree = "<group>"; };
+		E99FBE262C440DD000126E71 /* __init__.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = __init__.py; sourceTree = "<group>"; };
+		E99FBE282C44135C00126E71 /* main.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = main.py; sourceTree = "<group>"; };
+		E99FBE2A2C44154700126E71 /* __init__.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = __init__.py; sourceTree = "<group>"; };
 		E9A221E62C134B3E000F5004 /* APIResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIResponse.swift; sourceTree = "<group>"; };
 		E9A221E82C134B59000F5004 /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
 		E9A221EB2C134DF8000F5004 /* server.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = server.py; sourceTree = "<group>"; };
@@ -118,6 +129,8 @@
 		E951E7362BCD7A2600E55A35 = {
 			isa = PBXGroup;
 			children = (
+				E99FBE282C44135C00126E71 /* main.py */,
+				E99FBE2A2C44154700126E71 /* __init__.py */,
 				E951E7712BCD8A8E00E55A35 /* models */,
 				E951E7732BCD8A8E00E55A35 /* services */,
 				E951E7722BCD8A8E00E55A35 /* view_models */,
@@ -182,6 +195,7 @@
 			children = (
 				E951E7752BCD8AD500E55A35 /* PasswordItem.swift */,
 				E9A221E62C134B3E000F5004 /* APIResponse.swift */,
+				E99FBE1A2C44028F00126E71 /* Config.swift */,
 			);
 			path = models;
 			sourceTree = "<group>";
@@ -216,6 +230,10 @@
 				E951E7442BCD7A2600E55A35 /* ContentView.swift */,
 				E951E7772BCD8B3500E55A35 /* AddPasswordView.swift */,
 				E91B0B962C1B1424009FB9B3 /* PasswordListView.swift */,
+				E99FBE142C43F51300126E71 /* LoginView.swift */,
+				E99FBE162C43F58F00126E71 /* LoadingView.swift */,
+				E99FBE182C43FD7A00126E71 /* RegisterView.swift */,
+				E99FBE1C2C4402C500126E71 /* SettingsView.swift */,
 			);
 			path = views;
 			sourceTree = "<group>";
@@ -227,6 +245,7 @@
 				E9A221EE2C134E60000F5004 /* controllers */,
 				E9A221F02C134E60000F5004 /* models */,
 				E9A221ED2C134E60000F5004 /* routes */,
+				E99FBE262C440DD000126E71 /* __init__.py */,
 				E9A221EB2C134DF8000F5004 /* server.py */,
 			);
 			path = backend;
@@ -235,6 +254,7 @@
 		E9A221ED2C134E60000F5004 /* routes */ = {
 			isa = PBXGroup;
 			children = (
+				E99FBE242C440DC700126E71 /* __init__.py */,
 				E9A221F12C134E7B000F5004 /* authRoutes.py */,
 				E9A221F52C134EDA000F5004 /* dataRoutes.py */,
 			);
@@ -244,6 +264,7 @@
 		E9A221EE2C134E60000F5004 /* controllers */ = {
 			isa = PBXGroup;
 			children = (
+				E99FBE202C440DBE00126E71 /* __init__.py */,
 				E9A221F72C134F41000F5004 /* authController.py */,
 				E9A221F92C134F63000F5004 /* dataController.py */,
 			);
@@ -254,6 +275,7 @@
 			isa = PBXGroup;
 			children = (
 				E9A221FD2C134F8A000F5004 /* vaultConfig.py */,
+				E99FBE1E2C440DB900126E71 /* __init__.py */,
 			);
 			path = config;
 			sourceTree = "<group>";
@@ -261,6 +283,7 @@
 		E9A221F02C134E60000F5004 /* models */ = {
 			isa = PBXGroup;
 			children = (
+				E99FBE222C440DC000126E71 /* __init__.py */,
 				E9A221FB2C134F76000F5004 /* secretModel.py */,
 			);
 			path = models;
@@ -370,14 +393,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E9A221F22C134E7B000F5004 /* authRoutes.py in Resources */,
 				E951E74A2BCD7A2800E55A35 /* Preview Assets.xcassets in Resources */,
-				E9A221F62C134EDA000F5004 /* dataRoutes.py in Resources */,
-				E9A221EC2C134DF8000F5004 /* server.py in Resources */,
-				E9A221FC2C134F76000F5004 /* secretModel.py in Resources */,
-				E9A221FA2C134F63000F5004 /* dataController.py in Resources */,
-				E9A221FE2C134F8A000F5004 /* vaultConfig.py in Resources */,
-				E9A221F82C134F41000F5004 /* authController.py in Resources */,
+				E99FBE292C44135C00126E71 /* main.py in Resources */,
 				E951E7472BCD7A2800E55A35 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -403,7 +420,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E91B0B952C1B0F3B009FB9B3 /* NFCViewModel.swift in Sources */,
+				E99FBE2C2C4415F200126E71 /* NFCViewModel.swift in Sources */,
+				E99FBE1D2C4402C500126E71 /* SettingsView.swift in Sources */,
 				E951E7802BCD8BA000E55A35 /* EncryptionService.swift in Sources */,
 				E951E74C2BCD7A2800E55A35 /* Persistence.swift in Sources */,
 				E951E7452BCD7A2600E55A35 /* ContentView.swift in Sources */,
@@ -411,14 +429,18 @@
 				E951E7762BCD8AD500E55A35 /* PasswordItem.swift in Sources */,
 				E9A221E72C134B3E000F5004 /* APIResponse.swift in Sources */,
 				E951E77E2BCD8B8F00E55A35 /* NFCServices.swift in Sources */,
+				E99FBE192C43FD7A00126E71 /* RegisterView.swift in Sources */,
 				E951E74F2BCD7A2800E55A35 /* nfsee.xcdatamodeld in Sources */,
 				E951E77C2BCD8B7600E55A35 /* AddPasswordViewModel.swift in Sources */,
+				E99FBE152C43F51300126E71 /* LoginView.swift in Sources */,
 				E951E7822BCD8BB400E55A35 /* CoreDataService.swift in Sources */,
 				E951E7782BCD8B3500E55A35 /* AddPasswordView.swift in Sources */,
 				E91B0B972C1B1424009FB9B3 /* PasswordListView.swift in Sources */,
 				E9A221E92C134B59000F5004 /* NetworkService.swift in Sources */,
 				E951E77A2BCD8B6300E55A35 /* PasswordListViewModel.swift in Sources */,
+				E99FBE1B2C44028F00126E71 /* Config.swift in Sources */,
 				E9998D292C38A5DB002E8D20 /* PasswordListDelegate.swift in Sources */,
+				E99FBE172C43F58F00126E71 /* LoadingView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

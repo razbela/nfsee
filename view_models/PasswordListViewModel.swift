@@ -13,7 +13,7 @@ class PasswordListViewModel: ObservableObject, PasswordListDelegate {
     
     func addPassword(_ password: PasswordItem) {
         print("Adding password: \(password.title)")
-        startNFCSession(writing: false) { [weak self] keyData in
+        startNFCSession(writing: false) { [weak self] keyData, _ in
             guard let self = self, let keyData = keyData else {
                 DispatchQueue.main.async {
                     self?.alertMessage = "Failed to read key from NFC."
@@ -61,7 +61,7 @@ class PasswordListViewModel: ObservableObject, PasswordListDelegate {
                 self.isListening.toggle()
             }
         } else {
-            startNFCSession(writing: false) { [weak self] keyData in
+            startNFCSession(writing: false) { [weak self] keyData, _ in
                 guard let self = self, let keyData = keyData else {
                     DispatchQueue.main.async {
                         self?.alertMessage = "Failed to read key from NFC."
@@ -83,7 +83,7 @@ class PasswordListViewModel: ObservableObject, PasswordListDelegate {
         }
     }
 
-    private func startNFCSession(writing: Bool, completion: @escaping (Data?) -> Void) {
+    private func startNFCSession(writing: Bool, completion: @escaping (Data?, String?) -> Void) {
         print("Starting NFC session - Writing: \(writing)")
         nfcService.startSession(prompt: true, writing: writing, completion: completion)
     }
