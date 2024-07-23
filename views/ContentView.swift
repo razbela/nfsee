@@ -30,6 +30,7 @@ struct ContentView: View {
                 showingSettings = true
             }) {
                 Image(systemName: "gear")
+                    .foregroundColor(AppColors.white)
                     .imageScale(.large)
             })
             .sheet(isPresented: $showingSettings) {

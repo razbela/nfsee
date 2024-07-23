@@ -5,30 +5,44 @@ struct SettingsView: View {
     @State private var serverPort: String = Config.shared.serverPort
     
     var body: some View {
-        VStack {
-            Text("Settings")
-                .font(.largeTitle)
-                .padding()
-
-            TextField("Server IP Address", text: $serverIPAddress)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-                .padding()
-
-            TextField("Server Port", text: $serverPort)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-                .padding()
-
-            Button(action: saveSettings) {
-                Text("Save")
-                    .font(.title)
-                    .padding()
-                    .background(Color.blue)
-                    .foregroundColor(.white)
-                    .cornerRadius(10)
+        ZStack {
+            AppColors.black.edgesIgnoringSafeArea(.all)
+            VStack {
+                Text("Settings")
+                    .font(.largeTitle)
+                    .foregroundColor(AppColors.white)
+                    .padding(.top, 20)
+                
+                VStack(spacing: 16) {
+                    TextField("Server IP Address", text: $serverIPAddress)
+                        .padding()
+                        .background(AppColors.white)
+                        .cornerRadius(6)
+                        .foregroundColor(AppColors.black)
+                        .padding(.horizontal)
+                    
+                    TextField("Server Port", text: $serverPort)
+                        .padding()
+                        .background(AppColors.white)
+                        .cornerRadius(6)
+                        .shadow(radius: 2)
+                        .foregroundColor(AppColors.black)
+                        .padding(.horizontal)
+                }
+                
+                Button(action: saveSettings) {
+                    Text("Save")
+                        .font(.title)
+                        .padding()
+                        .background(AppColors.blue)
+                        .foregroundColor(AppColors.white)
+                        .cornerRadius(11)
+                        .fixedSize()
+                }
+                .padding(.top, 20)
             }
             .padding()
         }
-        .padding()
     }
     
     func saveSettings() {

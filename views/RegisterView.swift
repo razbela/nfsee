@@ -9,44 +9,80 @@ struct RegisterView: View {
     @EnvironmentObject var nfcViewModel: NFCViewModel
     
     var body: some View {
-        VStack {
-            Text("Register")
-                .font(.largeTitle)
-                .padding()
-
-            TextField("Username", text: $username)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-                .padding()
-
-            SecureField("Password", text: $password)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-                .padding()
-
-            if let errorMessage = errorMessage {
-                Text(errorMessage)
-                    .foregroundColor(.red)
+        ZStack {
+            AppColors.green.edgesIgnoringSafeArea(.all)
+            Circle()
+                .scale(1.85)
+                .foregroundColor(AppColors.red)
+            Circle()
+                .scale(1.5)
+                .foregroundColor(AppColors.white)
+            VStack {
+                Image(systemName: "person.badge.plus")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 100, height: 100)
                     .padding()
-            }
-
-            Button(action: startRegistration) {
-                Text("Register")
-                    .font(.title)
-                    .padding()
-                    .background(Color.blue)
-                    .foregroundColor(.white)
-                    .cornerRadius(10)
-            }
-            .padding()
-
-            Button(action: {
-                isRegistering.toggle()
-            }) {
-                Text("Already have an account? Login")
-                    .foregroundColor(.blue)
+                    .foregroundColor(AppColors.red)
+                
+                VStack(spacing: 16) {
+                    ZStack(alignment: .leading) {
+                        if username.isEmpty {
+                            Text("Username")
+                                .foregroundColor(AppColors.black.opacity(0.5))
+                                .padding(7)
+                        }
+                        TextField("", text: $username)
+                            .padding(7)
+                            .background(AppColors.white)
+                            .cornerRadius(6)
+                            .shadow(radius: 2)
+                            .foregroundColor(AppColors.black)
+                            .font(.system(size: 18, weight: .medium))
+                            .padding(3)
+                    }
+                    ZStack(alignment: .leading) {
+                        if password.isEmpty {
+                            Text("Password")
+                                .foregroundColor(AppColors.black.opacity(0.5))
+                                .padding(7)
+                        }
+                        SecureField("", text: $password)
+                            .padding(7)
+                            .background(AppColors.white)
+                            .cornerRadius(6)
+                            .shadow(radius: 2)
+                            .foregroundColor(AppColors.black)
+                            .font(.system(size: 18, weight: .medium))
+                            .padding(3)
+                    }
+                }
+                if let errorMessage = errorMessage {
+                    Text(errorMessage)
+                        .foregroundColor(AppColors.red)
+                        .padding()
+                }
+                
+                Button(action: startRegistration) {
+                    Text("Register")
+                        .font(.title3) // Smaller font size
+                        .padding(10) // Smaller padding
+                        .background(AppColors.black)
+                        .foregroundColor(AppColors.white)
+                        .cornerRadius(4)
+                }
+                .padding()
+                
+                Button(action: {
+                    isRegistering.toggle()
+                }) {
+                    Text("Already have an account? Login")
+                        .foregroundColor(AppColors.black)
+                }
+                .padding()
             }
             .padding()
         }
-        .padding()
         .alert(isPresented: $nfcViewModel.showAlert) {
             Alert(title: Text("NFC Operation"), message: Text(nfcViewModel.alertMessage), dismissButton: .default(Text("OK")))
         }
@@ -118,5 +154,22 @@ struct RegisterView: View {
                 }
             }
         }.resume()
+    }
+}
+
+struct RegisterViewWrapper: View {
+    @State private var isRegistering = true
+    @State private var isLoggedIn = false
+    @StateObject private var nfcViewModel = NFCViewModel() // Assuming you have a NFCViewModel class/struct
+    
+    var body: some View {
+        RegisterView(isRegistering: $isRegistering, isLoggedIn: $isLoggedIn)
+            .environmentObject(nfcViewModel)
+    }
+}
+
+struct RegisterView_Previews: PreviewProvider {
+    static var previews: some View {
+        RegisterViewWrapper()
     }
 }

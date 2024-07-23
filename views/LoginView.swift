@@ -9,44 +9,79 @@ struct LoginView: View {
     @EnvironmentObject var nfcViewModel: NFCViewModel
     
     var body: some View {
-        VStack {
-            Text("Login")
-                .font(.largeTitle)
-                .padding()
-
-            TextField("Username", text: $username)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-                .padding()
-
-            SecureField("Password", text: $password)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-                .padding()
-
-            if let errorMessage = errorMessage {
-                Text(errorMessage)
-                    .foregroundColor(.red)
+        ZStack {
+            AppColors.red.edgesIgnoringSafeArea(.all)
+            Circle()
+                .scale(1.85)
+                .foregroundColor(AppColors.green)
+            Circle()
+                .scale(1.5)
+                .foregroundColor(AppColors.white)
+            VStack {
+                Image(systemName: isLoggedIn ? "lock.open.fill" : "lock.fill")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 100, height: 100)
                     .padding()
-            }
-
-            Button(action: login) {
-                Text("Login")
-                    .font(.title)
-                    .padding()
-                    .background(Color.blue)
-                    .foregroundColor(.white)
-                    .cornerRadius(10)
-            }
-            .padding()
-
-            Button(action: {
-                isRegistering.toggle()
-            }) {
-                Text("Don't have an account? Register")
-                    .foregroundColor(.blue)
+                    .foregroundColor(isLoggedIn ? .green : AppColors.red)
+                
+                VStack(spacing: 16) {ZStack(alignment: .leading) {
+                if username.isEmpty {
+                                    Text("Username")
+                                    .foregroundColor(AppColors.black.opacity(0.5))
+                                    .padding(7)
+                                    }
+                                    TextField("", text: $username)
+                                    .padding(7)
+                                    .background(AppColors.white)
+                                    .cornerRadius(6)
+                                    .shadow(radius: 2)
+                                    .foregroundColor(AppColors.black)
+                                    .font(.system(size: 18, weight: .medium))
+                                    .padding(3)
+                                    }
+                ZStack(alignment: .leading) {
+                if password.isEmpty{
+                                    Text("Password")
+                                    .foregroundColor(AppColors.black.opacity(0.5))
+                                    .padding(7)
+                                    }
+                                    SecureField("", text: $password)
+                                    .padding(7)
+                                    .background(AppColors.white)
+                                    .cornerRadius(6)
+                                    .shadow(radius: 2)
+                                    .foregroundColor(AppColors.black)
+                                    .font(.system(size: 18, weight: .medium))
+                                    .padding(3)
+                }
+                }
+                if let errorMessage = errorMessage {
+                    Text(errorMessage)
+                        .foregroundColor(AppColors.red)
+                        .padding()
+                }
+                
+                Button(action: login) {
+                    Text("Login")
+                        .font(.title3) // Smaller font size
+                        .padding(10) // Smaller padding
+                        .background(AppColors.black)
+                        .foregroundColor(AppColors.white)
+                        .cornerRadius(4)
+                }
+                .padding()
+                
+                Button(action: {
+                    isRegistering.toggle()
+                }) {
+                    Text("Don't have an account? Register")
+                        .foregroundColor(AppColors.black)
+                }
+                .padding()
             }
             .padding()
         }
-        .padding()
     }
 
     func login() {
@@ -99,5 +134,22 @@ struct LoginView: View {
                 }
             }
         }.resume()
+    }
+}
+
+struct LoginViewWrapper: View {
+    @State private var isRegistering = false
+    @State private var isLoggedIn = false
+    @StateObject private var nfcViewModel = NFCViewModel() // Assuming you have a NFCViewModel class/struct
+    
+    var body: some View {
+        LoginView(isRegistering: $isRegistering, isLoggedIn: $isLoggedIn)
+            .environmentObject(nfcViewModel)
+    }
+}
+
+struct LoginView_Previews: PreviewProvider {
+    static var previews: some View {
+        LoginViewWrapper()
     }
 }
