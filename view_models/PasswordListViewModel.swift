@@ -48,39 +48,52 @@ class PasswordListViewModel: ObservableObject, PasswordListDelegate {
             passwords.move(fromOffsets: source, toOffset: destination)
         }
     
-    func toggleEncryption(for password: PasswordItem) {
-        startNFCSession(writing: false) { [weak self] keyData, _ in
-            guard let self = self, let keyData = keyData else {
-                DispatchQueue.main.async {
-                    self?.alertMessage = "Failed to read key from NFC."
-                    self?.showAlert = true
-                }
-                return
-            }
-            let key = SymmetricKey(data: keyData)
-            if password.isDecrypted {
-                if let decryptedData = password.password.data(using: .utf8),
-                   let encryptedData = self.encryptionService.encrypt(data: decryptedData, key: key) {
-                    DispatchQueue.main.async {
-                        if let index = self.passwords.firstIndex(of: password) {
-                            self.passwords[index].password = encryptedData.base64EncodedString()
-                            self.passwords[index].isDecrypted = false
-                        }
-                    }
-                }
-            } else {
-                if let encryptedData = Data(base64Encoded: password.password),
-                   let decryptedData = self.encryptionService.decrypt(data: encryptedData, key: key) {
-                    DispatchQueue.main.async {
-                        if let index = self.passwords.firstIndex(of: password) {
-                            self.passwords[index].password = String(data: decryptedData, encoding: .utf8) ?? "Decryption failed"
-                            self.passwords[index].isDecrypted = true
-                        }
-                    }
-                }
-            }
-        }
-    }
+    func toggleEncryption(for password: PasswordItem, completion: @escaping (Bool) -> Void) {
+           startNFCSession(writing: false) { [weak self] keyData, _ in
+               guard let self = self, let keyData = keyData else {
+                   DispatchQueue.main.async {
+                       self?.alertMessage = "Failed to read key from NFC."
+                       self?.showAlert = true
+                       completion(false)
+                   }
+                   return
+               }
+               let key = SymmetricKey(data: keyData)
+               if password.isDecrypted {
+                   if let decryptedData = password.password.data(using: .utf8),
+                      let encryptedData = self.encryptionService.encrypt(data: decryptedData, key: key) {
+                       DispatchQueue.main.async {
+                           if let index = self.passwords.firstIndex(of: password) {
+                               self.passwords[index].password = encryptedData.base64EncodedString()
+                               self.passwords[index].isDecrypted = false
+                               completion(true)
+                           } else {
+                               completion(false)
+                           }
+                       }
+                   } else {
+                       completion(false)
+                   }
+               } else {
+                   if let encryptedData = Data(base64Encoded: password.password),
+                      let decryptedData = self.encryptionService.decrypt(data: encryptedData, key: key) {
+                       DispatchQueue.main.async {
+                           if let index = self.passwords.firstIndex(of: password) {
+                               self.passwords[index].password = String(data: decryptedData, encoding: .utf8) ?? "Decryption failed"
+                               self.passwords[index].isDecrypted = true
+                               completion(true)
+                           } else {
+                               completion(false)
+                           }
+                       }
+                   } else {
+                       completion(false)
+                   }
+               }
+           }
+       }
+
+
 
     private func startNFCSession(writing: Bool, completion: @escaping (Data?, String?) -> Void) {
         print("Starting NFC session - Writing: \(writing)")

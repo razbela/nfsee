@@ -39,3 +39,24 @@ struct ContentView: View {
         }
     }
 }
+
+struct ContentViewWrapper: View {
+    @State private var isLoading = false
+    @State private var isLoggedIn = false
+    @State private var isRegistering = false
+    @State private var showingSettings = false
+    @StateObject private var nfcViewModel = NFCViewModel()
+    @StateObject private var passwordListViewModel = PasswordListViewModel()
+
+    var body: some View {
+        ContentView()
+            .environmentObject(nfcViewModel)
+            .environmentObject(passwordListViewModel)
+    }
+}
+
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        ContentViewWrapper()
+    }
+}

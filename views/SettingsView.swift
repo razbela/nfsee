@@ -3,6 +3,7 @@ import SwiftUI
 struct SettingsView: View {
     @State private var serverIPAddress: String = Config.shared.serverIPAddress
     @State private var serverPort: String = Config.shared.serverPort
+    @Environment(\.presentationMode) var presentationMode
     
     var body: some View {
         ZStack {
@@ -48,6 +49,7 @@ struct SettingsView: View {
     func saveSettings() {
         Config.shared.serverIPAddress = serverIPAddress
         Config.shared.serverPort = serverPort
+        presentationMode.wrappedValue.dismiss()
     }
 }
 

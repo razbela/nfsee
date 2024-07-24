@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		E91B0B972C1B1424009FB9B3 /* PasswordListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E91B0B962C1B1424009FB9B3 /* PasswordListView.swift */; };
+		E92906002C4DB7BB003FC88F /* AppColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = E92905FF2C4DB7BB003FC88F /* AppColors.swift */; };
 		E951E7432BCD7A2600E55A35 /* nfseeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E951E7422BCD7A2600E55A35 /* nfseeApp.swift */; };
 		E951E7452BCD7A2600E55A35 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E951E7442BCD7A2600E55A35 /* ContentView.swift */; };
 		E951E7472BCD7A2800E55A35 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E951E7462BCD7A2800E55A35 /* Assets.xcassets */; };
@@ -57,6 +58,7 @@
 		E90D7B142C15B00300B99884 /* nfseeDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = nfseeDebug.entitlements; sourceTree = "<group>"; };
 		E91B0B942C1B0F3B009FB9B3 /* NFCViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NFCViewModel.swift; sourceTree = "<group>"; };
 		E91B0B962C1B1424009FB9B3 /* PasswordListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordListView.swift; sourceTree = "<group>"; };
+		E92905FF2C4DB7BB003FC88F /* AppColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppColors.swift; sourceTree = "<group>"; };
 		E951E73F2BCD7A2600E55A35 /* nfsee.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = nfsee.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E951E7422BCD7A2600E55A35 /* nfseeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = nfseeApp.swift; sourceTree = "<group>"; };
 		E951E7442BCD7A2600E55A35 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -234,6 +236,7 @@
 				E99FBE162C43F58F00126E71 /* LoadingView.swift */,
 				E99FBE182C43FD7A00126E71 /* RegisterView.swift */,
 				E99FBE1C2C4402C500126E71 /* SettingsView.swift */,
+				E92905FF2C4DB7BB003FC88F /* AppColors.swift */,
 			);
 			path = views;
 			sourceTree = "<group>";
@@ -435,6 +438,7 @@
 				E99FBE152C43F51300126E71 /* LoginView.swift in Sources */,
 				E951E7822BCD8BB400E55A35 /* CoreDataService.swift in Sources */,
 				E951E7782BCD8B3500E55A35 /* AddPasswordView.swift in Sources */,
+				E92906002C4DB7BB003FC88F /* AppColors.swift in Sources */,
 				E91B0B972C1B1424009FB9B3 /* PasswordListView.swift in Sources */,
 				E9A221E92C134B59000F5004 /* NetworkService.swift in Sources */,
 				E951E77A2BCD8B6300E55A35 /* PasswordListViewModel.swift in Sources */,
