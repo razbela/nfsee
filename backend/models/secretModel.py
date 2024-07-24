@@ -5,6 +5,17 @@ class User(db.Model):
     username = db.Column(db.String(150), unique=True, nullable=False)
     password = db.Column(db.String(150), nullable=False)
     nfc_uid = db.Column(db.String(150), nullable=True)
+    local_vault = db.relationship('LocalVault', backref='user', uselist=False)
 
-    def __repr__(self):
-        return f'<User {self.username}>'
+class LocalVault(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    stored_passwords = db.relationship('StoredPassword', backref='local_vault', lazy=True)
+
+class StoredPassword(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(150), nullable=False)
+    username = db.Column(db.String(150), nullable=False)
+    password = db.Column(db.String(150), nullable=False)
+    isDecrypted = db.Column(db.Boolean, default=False)
+    local_vault_id = db.Column(db.Integer, db.ForeignKey('local_vault.id'), nullable=False)

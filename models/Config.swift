@@ -9,7 +9,7 @@ class Config {
     private init() {
         if UserDefaults.standard.string(forKey: ipAddressKey) == nil {
             // Set a default IP address if not already set
-            UserDefaults.standard.set("10.100.102.6", forKey: ipAddressKey)
+            UserDefaults.standard.set("10.100.102.16", forKey: ipAddressKey)
         }
         if UserDefaults.standard.string(forKey: portKey) == nil {
             // Set a default port if not already set
@@ -19,7 +19,7 @@ class Config {
     
     var serverIPAddress: String {
         get {
-            return UserDefaults.standard.string(forKey: ipAddressKey) ?? "10.100.102.6"
+            return UserDefaults.standard.string(forKey: ipAddressKey) ?? "10.100.102.16"
         }
         set {
             UserDefaults.standard.set(newValue, forKey: ipAddressKey)

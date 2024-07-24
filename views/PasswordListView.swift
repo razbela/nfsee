@@ -14,7 +14,7 @@ struct PasswordListView: View {
                         ForEach(passwordListViewModel.passwords) { password in
                             HStack {
                                 VStack(alignment: .leading) {
-                                    if isPasswordVisible {
+                                    if isPasswordVisible && password.isDecrypted {
                                         Text(password.username)
                                             .font(.headline)
                                             .padding(.bottom, 3)
@@ -33,7 +33,6 @@ struct PasswordListView: View {
                                     }
                                 }
                                 Spacer()
-                                .buttonStyle(PlainButtonStyle())
                                 Button(action: {
                                     copyPasswordToClipboard(password)
                                 }) {
@@ -57,7 +56,7 @@ struct PasswordListView: View {
                                 Button(action: {
                                     passwordListViewModel.toggleEncryption(for: password) { success in
                                         if success {
-                                            withAnimation(.bouncy) {
+                                            withAnimation(.easeInOut) {
                                                 // The state change will automatically animate due to @Published
                                             }
                                         }
@@ -136,17 +135,6 @@ struct PasswordListViewWrapper: View {
     var body: some View {
         PasswordListView()
             .environmentObject(passwordListViewModel)
-            .onAppear {
-                // Adding example data
-                let examplePasswords = [
-                    PasswordItem(title: "Example 1", username: "user1", password: "password1"),
-                    PasswordItem(title: "Example 2", username: "user2", password: "password2"),
-                    PasswordItem(title: "Example 3", username: "user3", password: "password3")
-                ]
-                for password in examplePasswords {
-                    passwordListViewModel.addPassword(password)
-                }
-            }
     }
 }
 

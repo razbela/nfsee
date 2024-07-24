@@ -117,22 +117,25 @@ struct LoginView: View {
             guard let data = data else { return }
             
             if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 {
-                do {
-                    let jsonResponse = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
-                    print("Login successful: \(jsonResponse ?? [:])")
-                    DispatchQueue.main.async {
-                        self.isLoggedIn = true
-                    }
-                } catch {
-                    print("Error parsing JSON response: \(error.localizedDescription)")
-                }
-            } else {
-                if let httpResponse = response as? HTTPURLResponse {
-                    DispatchQueue.main.async {
-                        errorMessage = "Login failed: \(HTTPURLResponse.localizedString(forStatusCode: httpResponse.statusCode))"
-                    }
+                        do {
+                            if let jsonResponse = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
+                               let token = jsonResponse["access_token"] as? String {
+                                print("Login successful: \(jsonResponse)")
+                                DispatchQueue.main.async {
+                                    UserDefaults.standard.set(token, forKey: "jwtToken")
+                                    self.isLoggedIn = true
+                                }
+                            }
+                        } catch {
+                            print("Error parsing JSON response: \(error.localizedDescription)")
+                        }
+                    } else {
+                        if let httpResponse = response as? HTTPURLResponse {
+                            DispatchQueue.main.async {
+                                errorMessage = "Login failed: \(HTTPURLResponse.localizedString(forStatusCode: httpResponse.statusCode))"
                 }
             }
+        }
         }.resume()
     }
 }
