@@ -41,7 +41,6 @@ struct PasswordListView: View {
                                         .font(.system(size: 22))
                                         .padding(.trailing, 5)
                                 }
-                                
                                 .buttonStyle(PlainButtonStyle())
                                 Button(action: {
                                     isPasswordVisible.toggle()
@@ -50,7 +49,6 @@ struct PasswordListView: View {
                                         .foregroundColor(.white)
                                         .font(.system(size: 22))
                                         .padding(.trailing, 5)
-                                        
                                 }
                                 .buttonStyle(PlainButtonStyle())
                                 Button(action: {
@@ -87,6 +85,10 @@ struct PasswordListView: View {
                                 .foregroundColor(AppColors.black)
                         }
                     })
+                    .onAppear {
+                        print("Passwords on appear: \(passwordListViewModel.passwords)")
+                        passwordListViewModel.loadPasswords()
+                    }
                     .sheet(isPresented: $showingAddPasswordView) {
                         let addPasswordViewModel = AddPasswordViewModel(delegate: passwordListViewModel)
                         AddPasswordView(viewModel: addPasswordViewModel)
@@ -143,3 +145,4 @@ struct PasswordListView_Previews: PreviewProvider {
         PasswordListViewWrapper()
     }
 }
+    

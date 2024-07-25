@@ -3,6 +3,9 @@ from backend.models.secretModel import User, LocalVault, db
 from backend.server import bcrypt  # Import bcrypt from your server initialization
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 
+auth_bp = Blueprint('auth_bp', __name__)
+
+@auth_bp.route('/register', methods=['POST'])
 def register():
     data = request.get_json()
     username = data.get('username')
@@ -28,6 +31,7 @@ def register():
         db.session.rollback()
         return jsonify({"message": "Error registering user", "error": str(e)}), 500
 
+@auth_bp.route('/login', methods=['POST'])
 def login():
     data = request.get_json()
     username = data.get('username')

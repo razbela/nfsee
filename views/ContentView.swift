@@ -21,6 +21,7 @@ struct ContentView: View {
                 } else {
                     LoginView(isRegistering: $isRegistering, isLoggedIn: $isLoggedIn)
                         .environmentObject(nfcViewModel)
+                        .environmentObject(passwordListViewModel)
                 }
             }
             .alert(isPresented: $nfcViewModel.showAlert) {

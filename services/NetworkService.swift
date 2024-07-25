@@ -2,13 +2,13 @@ import Foundation
 
 class NetworkService {
     static let shared = NetworkService()
-    private let baseURL = "http://10.100.102.16:4444"
+    private let baseURL = "http://10.100.102.6:4444"
 
     private init() {}
 
-    func fetchPasswords(completion: @escaping ([PasswordItem]?) -> Void) {
+    func fetchPasswords(completion: @escaping ([PasswordItem]?, String?) -> Void) {
         guard let url = URL(string: "\(baseURL)/passwords") else {
-            completion(nil)
+            completion(nil, "Invalid URL")
             return
         }
 
@@ -20,23 +20,31 @@ class NetworkService {
 
         URLSession.shared.dataTask(with: request) { data, response, error in
             guard let data = data, error == nil else {
-                completion(nil)
+                print("Network error: \(error?.localizedDescription ?? "Unknown error")")
+                completion(nil, error?.localizedDescription ?? "Unknown error")
                 return
             }
 
             do {
                 let decoder = JSONDecoder()
-                let passwords = try decoder.decode([PasswordItem].self, from: data)
-                completion(passwords)
+                if let jsonResponse = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
+                   let passwordsData = jsonResponse["passwords"] as? [[String: Any]] {
+                    let jsonData = try JSONSerialization.data(withJSONObject: passwordsData, options: [])
+                    let passwords = try decoder.decode([PasswordItem].self, from: jsonData)
+                    completion(passwords, nil)
+                } else {
+                    completion(nil, "Invalid response format")
+                }
             } catch {
-                completion(nil)
+                print("Decoding error: \(error)")
+                completion(nil, "Failed to decode passwords")
             }
         }.resume()
     }
 
-    func addPassword(_ password: PasswordItem, completion: @escaping (Bool) -> Void) {
+    func addPassword(_ password: PasswordItem, completion: @escaping (Bool, String?) -> Void) {
         guard let url = URL(string: "\(baseURL)/passwords") else {
-            completion(false)
+            completion(false, "Invalid URL")
             return
         }
 
@@ -48,20 +56,20 @@ class NetworkService {
         }
 
         do {
-            var passwordToSend = password
-            passwordToSend.isDecrypted = false
             let encoder = JSONEncoder()
-            request.httpBody = try encoder.encode(passwordToSend)
+            request.httpBody = try encoder.encode(password)
 
             URLSession.shared.dataTask(with: request) { data, response, error in
                 guard let _ = data, error == nil else {
-                    completion(false)
+                    print("Network error: \(error?.localizedDescription ?? "Unknown error")")
+                    completion(false, error?.localizedDescription ?? "Unknown error")
                     return
                 }
-                completion(true)
+                completion(true, nil)
             }.resume()
         } catch {
-            completion(false)
+            print("Encoding error: \(error)")
+            completion(false, "Failed to encode password")
         }
     }
 }

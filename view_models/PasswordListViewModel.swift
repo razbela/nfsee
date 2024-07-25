@@ -10,17 +10,24 @@ class PasswordListViewModel: ObservableObject, PasswordListDelegate {
     private var encryptionService = EncryptionService()
     
     func loadPasswords() {
-            NetworkService.shared.fetchPasswords { [weak self] passwords in
-                DispatchQueue.main.async {
-                    if let passwords = passwords {
-                        self?.passwords = passwords
-                    } else {
-                        self?.alertMessage = "Failed to load passwords."
-                        self?.showAlert = true
-                    }
-                }
-            }
-        }
+           guard let token = UserDefaults.standard.string(forKey: "jwtToken") else {
+               alertMessage = "User is not authenticated."
+               showAlert = true
+               return
+           }
+        
+        NetworkService.shared.fetchPasswords { passwords, errorMessage in
+                   DispatchQueue.main.async {
+                       if let passwords = passwords {
+                           self.passwords = passwords
+                           self.showAlert = false  // Ensure alert is not shown on success
+                       } else if let errorMessage = errorMessage {
+                           self.alertMessage = "Failed to load passwords: \(errorMessage)"
+                           self.showAlert = true
+                       }
+                   }
+               }
+           }
     
     func addPassword(_ password: PasswordItem) {
             print("Adding password: \(password.title)")
@@ -44,7 +51,7 @@ class PasswordListViewModel: ObservableObject, PasswordListDelegate {
                         self.passwords.append(encryptedPassword)
                         print("Passwords count: \(self.passwords.count)")
                     }
-                    NetworkService.shared.addPassword(encryptedPassword) { success in
+                    NetworkService.shared.addPassword(encryptedPassword) { success, errorMessage in
                         if !success {
                             DispatchQueue.main.async {
                                 self.alertMessage = "Failed to add password to server."
@@ -60,7 +67,6 @@ class PasswordListViewModel: ObservableObject, PasswordListDelegate {
                 }
             }
         }
-
 
     func deletePasswords(at offsets: IndexSet) {
         passwords.remove(atOffsets: offsets)
