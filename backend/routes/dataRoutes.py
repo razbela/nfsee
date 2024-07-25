@@ -1,6 +1,7 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from backend.models.secretModel import User, LocalVault, StoredPassword, db
+from backend.server import vault_client
 import uuid
 
 data_bp = Blueprint('data_bp', __name__)
@@ -31,7 +32,7 @@ def add_password():
             db.session.commit()
 
         new_password = StoredPassword(
-            id=str(uuid.uuid4()),
+            id=str(uuid.uuid4()).lower(),
             title=title,
             username=username,
             password=password,
@@ -41,6 +42,21 @@ def add_password():
 
         db.session.add(new_password)
         db.session.commit()
+
+        # Store the password in HashiCorp Vault
+        try:
+            vault_client.secrets.kv.v2.create_or_update_secret(
+                path=f'passwords/{new_password.id}',
+                secret={
+                    'title': title,
+                    'username': username,
+                    'password': password
+                }
+            )
+            print(f"Password stored in Vault with id: {new_password.id}")
+        except Exception as e:
+            print(f"Error storing password in Vault: {str(e)}")
+
         return jsonify({"message": "Password added successfully"}), 201
 
     except Exception as e:
@@ -94,13 +110,13 @@ def delete_password(password_id):
         if not local_vault:
             return jsonify({"message": "Vault not found for user"}), 404
 
-        password_id = password_id.lower()  # Convert the incoming password_id to lowercase
+        password_id = password_id.lower()
         print(f"Attempting to delete password with id: {password_id}")
 
         # Print out all passwords to see their IDs
         passwords = StoredPassword.query.filter_by(local_vault_id=local_vault.id).all()
         for password in passwords:
-            print(f"Stored password ID: {password.id.lower()}")  # Print stored IDs in lowercase
+            print(f"Stored password ID: {password.id.lower()}")
 
         # Query the password by converting stored IDs to lowercase
         password = StoredPassword.query.filter_by(id=password_id, local_vault_id=local_vault.id).first()
@@ -112,6 +128,13 @@ def delete_password(password_id):
         print(f"Deleting password: {password_id}")
         db.session.delete(password)
         db.session.commit()
+
+        # Remove the password from HashiCorp Vault
+        try:
+            vault_client.secrets.kv.v2.delete_metadata_and_all_versions(path=f'passwords/{password.id}')
+            print(f"Password deleted from Vault with id: {password.id}")
+        except Exception as e:
+            print(f"Error deleting password from Vault: {str(e)}")
 
         return jsonify({"message": "Password deleted successfully"}), 200
 

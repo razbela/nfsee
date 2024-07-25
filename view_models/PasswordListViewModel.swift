@@ -10,24 +10,18 @@ class PasswordListViewModel: ObservableObject, PasswordListDelegate {
     private var encryptionService = EncryptionService()
     
     func loadPasswords() {
-           guard let token = UserDefaults.standard.string(forKey: "jwtToken") else {
-               alertMessage = "User is not authenticated."
-               showAlert = true
-               return
-           }
-        
-        NetworkService.shared.fetchPasswords { passwords, errorMessage in
-                   DispatchQueue.main.async {
-                       if let passwords = passwords {
-                           self.passwords = passwords
-                           self.showAlert = false  // Ensure alert is not shown on success
-                       } else if let errorMessage = errorMessage {
-                           self.alertMessage = "Failed to load passwords: \(errorMessage)"
-                           self.showAlert = true
-                       }
-                   }
-               }
-           }
+            NetworkService.shared.fetchPasswords { passwords, errorMessage in
+                DispatchQueue.main.async {
+                    if let passwords = passwords {
+                        self.passwords = passwords
+                        self.showAlert = false
+                    } else if let errorMessage = errorMessage {
+                        self.alertMessage = "Failed to load passwords: \(errorMessage)"
+                        self.showAlert = true
+                    }
+                }
+            }
+        }
     
     func addPassword(_ password: PasswordItem) {
             print("Adding password: \(password.title)")
@@ -67,25 +61,26 @@ class PasswordListViewModel: ObservableObject, PasswordListDelegate {
                 }
             }
         }
-    func deletePassword(_ password: PasswordItem) {
-            NetworkService.shared.deletePassword(password) { success, errorMessage in
-                DispatchQueue.main.async {
-                    if success {
-                        if let index = self.passwords.firstIndex(where: { $0.id == password.id }) {
-                            self.passwords.remove(at: index)
-                        }
-                        self.showAlert = false
-                    } else if let errorMessage = errorMessage {
-                        self.alertMessage = "Failed to delete password: \(errorMessage)"
-                        self.showAlert = true
-                    }
-                }
-            }
-        }
-    func deletePasswords(at offsets: IndexSet) {
-           offsets.map { self.passwords[$0] }.forEach { password in
-               self.deletePassword(password)
+    func deletePassword(_ passwordId: String) {
+           NetworkService.shared.deletePassword(passwordId) { success, errorMessage in
+               DispatchQueue.main.async {
+                   if success {
+                       if let index = self.passwords.firstIndex(where: { $0.id.uuidString == passwordId }) {
+                           self.passwords.remove(at: index)
+                       }
+                       self.showAlert = false
+                   } else if let errorMessage = errorMessage {
+                       self.alertMessage = "Failed to delete password: \(errorMessage)"
+                       self.showAlert = true
+                   }
+               }
            }
+       }
+    func deletePasswords(at offsets: IndexSet) {
+            for index in offsets {
+                let password = passwords[index]
+                deletePassword(password.id.uuidString)
+            }
        }
 
     func movePasswords(from source: IndexSet, to destination: Int) {

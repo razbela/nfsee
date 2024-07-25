@@ -4,7 +4,7 @@ struct PasswordListView: View {
     @EnvironmentObject var passwordListViewModel: PasswordListViewModel
     @State private var showingAddPasswordView = false
     @State private var copiedPassword: String? = nil
-    @State private var passwordVisibility: [UUID: Bool] = [:]
+    @State private var isPasswordVisible: Bool = false
 
     var body: some View {
         NavigationView {
@@ -14,7 +14,7 @@ struct PasswordListView: View {
                         ForEach(passwordListViewModel.passwords) { password in
                             HStack {
                                 VStack(alignment: .leading) {
-                                    if passwordVisibility[password.id] == true && password.isDecrypted {
+                                    if isPasswordVisible && password.isDecrypted {
                                         Text(password.username)
                                             .font(.headline)
                                             .padding(.bottom, 3)
@@ -43,9 +43,9 @@ struct PasswordListView: View {
                                 }
                                 .buttonStyle(PlainButtonStyle())
                                 Button(action: {
-                                    togglePasswordVisibility(for: password.id)
+                                    isPasswordVisible.toggle()
                                 }) {
-                                    Image(systemName: passwordVisibility[password.id] == true ? "eye.slash.fill" : "eye.fill")
+                                    Image(systemName: isPasswordVisible ? "eye.slash.fill" : "eye.fill")
                                         .foregroundColor(.white)
                                         .font(.system(size: 22))
                                         .padding(.trailing, 5)
@@ -128,10 +128,6 @@ struct PasswordListView: View {
                 copiedPassword = nil
             }
         }
-    }
-
-    private func togglePasswordVisibility(for id: UUID) {
-        passwordVisibility[id] = !(passwordVisibility[id] ?? false)
     }
 }
 
