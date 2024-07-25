@@ -72,4 +72,28 @@ class NetworkService {
             completion(false, "Failed to encode password")
         }
     }
+
+    func deletePassword(_ password: PasswordItem, completion: @escaping (Bool, String?) -> Void) {
+       guard let url = URL(string: "\(baseURL)/passwords/\(password.id)") else {
+           completion(false, "Invalid URL")
+           return
+       }
+
+       var request = URLRequest(url: url)
+       request.httpMethod = "DELETE"
+       request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+       if let token = UserDefaults.standard.string(forKey: "jwtToken") {
+           request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+       }
+
+       URLSession.shared.dataTask(with: request) { data, response, error in
+           guard let _ = data, error == nil else {
+               print("Network error: \(error?.localizedDescription ?? "Unknown error")")
+               completion(false, error?.localizedDescription ?? "Unknown error")
+               return
+           }
+           completion(true, nil)
+       }.resume()
+   }
 }
+

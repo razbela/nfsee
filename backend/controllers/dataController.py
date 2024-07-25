@@ -1,3 +1,7 @@
+from flask import Blueprint, request, jsonify
+from flask_jwt_extended import jwt_required, get_jwt_identity
+from backend.models.secretModel import User, LocalVault, StoredPassword, db
+
 data_bp = Blueprint('data_bp', __name__)
 
 @data_bp.route('/passwords', methods=['POST'])
@@ -25,13 +29,10 @@ def add_password():
             db.session.add(local_vault)
             db.session.commit()
 
-        # Encrypt the password using the NFC session
-        encrypted_password = nfc_module.encrypt(password)
-
         new_password = StoredPassword(
             title=title,
             username=username,
-            password=encrypted_password,
+            password=password,
             isDecrypted=False,
             local_vault_id=local_vault.id
         )
@@ -74,3 +75,35 @@ def get_passwords():
     except Exception as e:
         print("Error fetching passwords:", str(e))
         return jsonify({"message": "Error fetching passwords", "error": str(e)}), 500
+
+@data_bp.route('/passwords/<password_id>', methods=['DELETE'])
+@jwt_required()
+def delete_password(password_id):
+    try:
+        user_id = get_jwt_identity()
+        user = User.query.get(user_id)
+
+        if not user:
+            return jsonify({"message": "User not found"}), 404
+
+        print(f"Attempting to delete password with id: {password_id}")
+        password = StoredPassword.query.filter_by(id=password_id, local_vault_id=user.local_vault.id).first()
+
+        if not password:
+            print(f"Password not found for id: {password_id}")
+            return jsonify({"message": "Password not found"}), 404
+
+        print(f"Deleting password: {password_id}")
+        db.session.delete(password)
+        db.session.commit()
+
+        # Remove the password from the online vault
+        print(f"Deleting password from online vault: {password_id}")
+        client.secrets.kv.v2.delete_metadata_and_all_versions(path=f'passwords/{password.id}')
+
+        return jsonify({"message": "Password deleted successfully"}), 200
+
+    except Exception as e:
+        db.session.rollback()
+        print("Error deleting password:", str(e))
+        return jsonify({"message": "Error deleting password", "error": str(e)}), 500

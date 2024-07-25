@@ -67,10 +67,26 @@ class PasswordListViewModel: ObservableObject, PasswordListDelegate {
                 }
             }
         }
-
+    func deletePassword(_ password: PasswordItem) {
+            NetworkService.shared.deletePassword(password) { success, errorMessage in
+                DispatchQueue.main.async {
+                    if success {
+                        if let index = self.passwords.firstIndex(where: { $0.id == password.id }) {
+                            self.passwords.remove(at: index)
+                        }
+                        self.showAlert = false
+                    } else if let errorMessage = errorMessage {
+                        self.alertMessage = "Failed to delete password: \(errorMessage)"
+                        self.showAlert = true
+                    }
+                }
+            }
+        }
     func deletePasswords(at offsets: IndexSet) {
-        passwords.remove(atOffsets: offsets)
-    }
+           offsets.map { self.passwords[$0] }.forEach { password in
+               self.deletePassword(password)
+           }
+       }
 
     func movePasswords(from source: IndexSet, to destination: Int) {
         passwords.move(fromOffsets: source, toOffset: destination)
