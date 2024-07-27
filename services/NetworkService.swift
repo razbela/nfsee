@@ -6,7 +6,9 @@ struct PasswordsResponse: Codable {
 
 class NetworkService {
     static let shared = NetworkService()
-    private let baseURL = "http://10.100.102.6:4444"
+    private var baseURL: String {
+            return "http://\(Config.shared.serverIPAddress):\(Config.shared.serverPort)"
+        }
 
     private init() {}
 
