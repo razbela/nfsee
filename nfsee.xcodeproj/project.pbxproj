@@ -26,6 +26,10 @@
 		E951E7802BCD8BA000E55A35 /* EncryptionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E951E77F2BCD8BA000E55A35 /* EncryptionService.swift */; };
 		E951E7822BCD8BB400E55A35 /* CoreDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E951E7812BCD8BB400E55A35 /* CoreDataService.swift */; };
 		E97587A52C527FBA003E5AF7 /* vault.env in Resources */ = {isa = PBXBuildFile; fileRef = E97587A42C527FBA003E5AF7 /* vault.env */; };
+		E97587A72C54DBD0003E5AF7 /* config.json in Resources */ = {isa = PBXBuildFile; fileRef = E97587A62C54DBD0003E5AF7 /* config.json */; };
+		E97587A92C54DF4C003E5AF7 /* config.py in Resources */ = {isa = PBXBuildFile; fileRef = E97587A82C54DF4C003E5AF7 /* config.py */; };
+		E97587AB2C54E00B003E5AF7 /* __init__.py in Resources */ = {isa = PBXBuildFile; fileRef = E97587AA2C54E00B003E5AF7 /* __init__.py */; };
+		E97587AD2C552FD3003E5AF7 /* Readme.md in Resources */ = {isa = PBXBuildFile; fileRef = E97587AC2C552FD3003E5AF7 /* Readme.md */; };
 		E9998D292C38A5DB002E8D20 /* PasswordListDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9998D282C38A5DB002E8D20 /* PasswordListDelegate.swift */; };
 		E99FBE152C43F51300126E71 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E99FBE142C43F51300126E71 /* LoginView.swift */; };
 		E99FBE172C43F58F00126E71 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E99FBE162C43F58F00126E71 /* LoadingView.swift */; };
@@ -80,6 +84,10 @@
 		E951E77F2BCD8BA000E55A35 /* EncryptionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncryptionService.swift; sourceTree = "<group>"; };
 		E951E7812BCD8BB400E55A35 /* CoreDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataService.swift; sourceTree = "<group>"; };
 		E97587A42C527FBA003E5AF7 /* vault.env */ = {isa = PBXFileReference; lastKnownFileType = text; path = vault.env; sourceTree = "<group>"; };
+		E97587A62C54DBD0003E5AF7 /* config.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = config.json; sourceTree = "<group>"; };
+		E97587A82C54DF4C003E5AF7 /* config.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = config.py; sourceTree = "<group>"; };
+		E97587AA2C54E00B003E5AF7 /* __init__.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = __init__.py; sourceTree = "<group>"; };
+		E97587AC2C552FD3003E5AF7 /* Readme.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Readme.md; sourceTree = "<group>"; };
 		E9998D282C38A5DB002E8D20 /* PasswordListDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordListDelegate.swift; sourceTree = "<group>"; };
 		E99FBE142C43F51300126E71 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		E99FBE162C43F58F00126E71 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
@@ -133,6 +141,8 @@
 		E951E7362BCD7A2600E55A35 = {
 			isa = PBXGroup;
 			children = (
+				E97587AC2C552FD3003E5AF7 /* Readme.md */,
+				E97587A82C54DF4C003E5AF7 /* config.py */,
 				E97587A42C527FBA003E5AF7 /* vault.env */,
 				E99FBE282C44135C00126E71 /* main.py */,
 				E99FBE2A2C44154700126E71 /* __init__.py */,
@@ -201,6 +211,8 @@
 				E951E7752BCD8AD500E55A35 /* PasswordItem.swift */,
 				E9A221E62C134B3E000F5004 /* APIResponse.swift */,
 				E99FBE1A2C44028F00126E71 /* Config.swift */,
+				E97587A62C54DBD0003E5AF7 /* config.json */,
+				E97587AA2C54E00B003E5AF7 /* __init__.py */,
 			);
 			path = models;
 			sourceTree = "<group>";
@@ -399,9 +411,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E97587A92C54DF4C003E5AF7 /* config.py in Resources */,
 				E97587A52C527FBA003E5AF7 /* vault.env in Resources */,
+				E97587AB2C54E00B003E5AF7 /* __init__.py in Resources */,
 				E951E74A2BCD7A2800E55A35 /* Preview Assets.xcassets in Resources */,
+				E97587A72C54DBD0003E5AF7 /* config.json in Resources */,
 				E99FBE292C44135C00126E71 /* main.py in Resources */,
+				E97587AD2C552FD3003E5AF7 /* Readme.md in Resources */,
 				E951E7472BCD7A2800E55A35 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -41,7 +41,7 @@ struct PasswordListView: View {
                                         .padding(.trailing, 5)
                                 }
                                 .buttonStyle(PlainButtonStyle())
-
+                                
                                 if password.isDecrypted {
                                     Button(action: {
                                         passwordListViewModel.passwordVisibility[password.id] = !(passwordListViewModel.passwordVisibility[password.id] ?? false)
@@ -53,7 +53,7 @@ struct PasswordListView: View {
                                     }
                                     .buttonStyle(PlainButtonStyle())
                                 }
-
+                                
                                 Button(action: {
                                     passwordListViewModel.toggleEncryption(for: password) { success in
                                         if success {
@@ -69,12 +69,13 @@ struct PasswordListView: View {
                                 }
                             }
                             .padding()
-                            .background(AppColors.black)
+                            .background(AppColors.black) // Set background to clear
                             .overlay(
                                 RoundedRectangle(cornerRadius: 2)
                                     .stroke(password.isDecrypted ? AppColors.green : AppColors.red, lineWidth: 10)
                             )
-                            .contentShape(Rectangle()) // Ensures that only the buttons are clickable
+                            .contentShape(Rectangle())
+                            .listRowBackground(Color.clear) // Ensure the row background is clear
                         }
                         .onDelete(perform: passwordListViewModel.deletePasswords)
                         .onMove(perform: passwordListViewModel.movePasswords)
