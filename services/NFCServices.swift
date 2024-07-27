@@ -4,9 +4,9 @@ import CryptoKit
 class NFCService: NSObject, NFCTagReaderSessionDelegate {
     private var session: NFCTagReaderSession?
     private var completion: ((Data?, String?) -> Void)?
-
     private var completionCalled = false
     private var isWriting = false
+    static let shared = NFCService()
     
     func startSession(prompt: Bool, writing: Bool, completion: @escaping (Data?, String?) -> Void) {
         print("Starting NFC session - Writing: \(writing)")

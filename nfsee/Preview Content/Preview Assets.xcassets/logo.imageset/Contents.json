@@ -1,14 +1,17 @@
 {
   "images" : [
     {
+      "filename" : "nfsee4 2.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
+      "filename" : "1234.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
+      "filename" : "nfsee4.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

@@ -25,6 +25,7 @@
 		E951E77E2BCD8B8F00E55A35 /* NFCServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = E951E77D2BCD8B8F00E55A35 /* NFCServices.swift */; };
 		E951E7802BCD8BA000E55A35 /* EncryptionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E951E77F2BCD8BA000E55A35 /* EncryptionService.swift */; };
 		E951E7822BCD8BB400E55A35 /* CoreDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E951E7812BCD8BB400E55A35 /* CoreDataService.swift */; };
+		E97587A52C527FBA003E5AF7 /* vault.env in Resources */ = {isa = PBXBuildFile; fileRef = E97587A42C527FBA003E5AF7 /* vault.env */; };
 		E9998D292C38A5DB002E8D20 /* PasswordListDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9998D282C38A5DB002E8D20 /* PasswordListDelegate.swift */; };
 		E99FBE152C43F51300126E71 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E99FBE142C43F51300126E71 /* LoginView.swift */; };
 		E99FBE172C43F58F00126E71 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E99FBE162C43F58F00126E71 /* LoadingView.swift */; };
@@ -78,6 +79,7 @@
 		E951E77D2BCD8B8F00E55A35 /* NFCServices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NFCServices.swift; sourceTree = "<group>"; };
 		E951E77F2BCD8BA000E55A35 /* EncryptionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncryptionService.swift; sourceTree = "<group>"; };
 		E951E7812BCD8BB400E55A35 /* CoreDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataService.swift; sourceTree = "<group>"; };
+		E97587A42C527FBA003E5AF7 /* vault.env */ = {isa = PBXFileReference; lastKnownFileType = text; path = vault.env; sourceTree = "<group>"; };
 		E9998D282C38A5DB002E8D20 /* PasswordListDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordListDelegate.swift; sourceTree = "<group>"; };
 		E99FBE142C43F51300126E71 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		E99FBE162C43F58F00126E71 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
@@ -131,6 +133,7 @@
 		E951E7362BCD7A2600E55A35 = {
 			isa = PBXGroup;
 			children = (
+				E97587A42C527FBA003E5AF7 /* vault.env */,
 				E99FBE282C44135C00126E71 /* main.py */,
 				E99FBE2A2C44154700126E71 /* __init__.py */,
 				E951E7712BCD8A8E00E55A35 /* models */,
@@ -396,6 +399,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E97587A52C527FBA003E5AF7 /* vault.env in Resources */,
 				E951E74A2BCD7A2800E55A35 /* Preview Assets.xcassets in Resources */,
 				E99FBE292C44135C00126E71 /* main.py in Resources */,
 				E951E7472BCD7A2800E55A35 /* Assets.xcassets in Resources */,

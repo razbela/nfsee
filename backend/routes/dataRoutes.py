@@ -81,7 +81,7 @@ def get_passwords():
 
         passwords = StoredPassword.query.filter_by(local_vault_id=local_vault.id).all()
         passwords_data = [{
-            "id": password.id,
+            "id": password.id.lower(),
             "title": password.title,
             "username": password.username,
             "password": password.password,
@@ -95,6 +95,40 @@ def get_passwords():
     except Exception as e:
         print("Error fetching passwords:", str(e))
         return jsonify({"message": "Error fetching passwords", "error": str(e)}), 500
+
+@data_bp.route('/passwords/<password_id>', methods=['GET'])
+@jwt_required()
+def get_password(password_id):
+    try:
+        user_id = get_jwt_identity()
+        user = User.query.get(user_id)
+
+        if not user:
+            return jsonify({"message": "User not found"}), 404
+
+        local_vault = user.local_vault
+        if not local_vault:
+            return jsonify({"message": "Vault not found for user"}), 404
+
+        password = StoredPassword.query.filter_by(id=password_id.lower(), local_vault_id=local_vault.id).first()
+
+        if not password:
+            return jsonify({"message": "Password not found"}), 404
+
+        password_data = {
+            "id": password.id.lower(),
+            "title": password.title,
+            "username": password.username,
+            "password": password.password,
+            "isDecrypted": password.isDecrypted
+        }
+
+        print(f"Returning password data: {password_data}")
+        return jsonify(password=password_data), 200
+
+    except Exception as e:
+        print("Error fetching password:", str(e))
+        return jsonify({"message": "Error fetching password", "error": str(e)}), 500
 
 @data_bp.route('/passwords/<password_id>', methods=['DELETE'])
 @jwt_required()
