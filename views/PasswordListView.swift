@@ -41,15 +41,19 @@ struct PasswordListView: View {
                                         .padding(.trailing, 5)
                                 }
                                 .buttonStyle(PlainButtonStyle())
-                                Button(action: {
-                                    passwordListViewModel.passwordVisibility[password.id] = !(passwordListViewModel.passwordVisibility[password.id] ?? false)
-                                }){
-                                    Image(systemName: (passwordListViewModel.passwordVisibility[password.id] ?? false) ? "eye.slash.fill" : "eye.fill")
-                                        .foregroundColor(.white)
-                                        .font(.system(size: 22))
-                                        .padding(.trailing, 5)
+
+                                if password.isDecrypted {
+                                    Button(action: {
+                                        passwordListViewModel.passwordVisibility[password.id] = !(passwordListViewModel.passwordVisibility[password.id] ?? false)
+                                    }) {
+                                        Image(systemName: (passwordListViewModel.passwordVisibility[password.id] ?? false) ? "eye.slash.fill" : "eye.fill")
+                                            .foregroundColor(.white)
+                                            .font(.system(size: 22))
+                                            .padding(.trailing, 5)
+                                    }
+                                    .buttonStyle(PlainButtonStyle())
                                 }
-                                .buttonStyle(PlainButtonStyle())
+
                                 Button(action: {
                                     passwordListViewModel.toggleEncryption(for: password) { success in
                                         if success {
@@ -96,7 +100,7 @@ struct PasswordListView: View {
                 .alert(isPresented: $passwordListViewModel.showAlert) {
                     Alert(title: Text("Message"), message: Text(passwordListViewModel.alertMessage), dismissButton: .default(Text("OK")))
                 }
-                
+
                 if let copiedPassword = copiedPassword {
                     VStack {
                         Spacer()
@@ -119,9 +123,9 @@ struct PasswordListView: View {
         let pasteboard = UIPasteboard.general
         let copiedText = password.isDecrypted ? password.password : password.password
         pasteboard.string = copiedText
-        
+
         copiedPassword = password.password
-        
+
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
             withAnimation(.easeInOut) {
                 copiedPassword = nil

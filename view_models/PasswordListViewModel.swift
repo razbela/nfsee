@@ -14,6 +14,9 @@ class PasswordListViewModel: ObservableObject, PasswordListDelegate {
             DispatchQueue.main.async {
                 if let passwords = passwords {
                     self?.passwords = passwords
+                    self?.passwordVisibility = passwords.reduce(into: [UUID: Bool]()) { result, password in
+                        result[password.id] = false
+                    }
                     self?.showAlert = false
                 } else if let errorMessage = errorMessage {
                     self?.alertMessage = "Failed to load passwords: \(errorMessage)"
@@ -39,6 +42,7 @@ class PasswordListViewModel: ObservableObject, PasswordListDelegate {
                 encryptedPassword.isDecrypted = false
                 DispatchQueue.main.async {
                     self.passwords.append(encryptedPassword)
+                    self.passwordVisibility[encryptedPassword.id] = false
                 }
                 NetworkService.shared.addPassword(encryptedPassword) { success, errorMessage in
                     if !success {
@@ -63,6 +67,7 @@ class PasswordListViewModel: ObservableObject, PasswordListDelegate {
                 if success {
                     if let index = self?.passwords.firstIndex(where: { $0.id.uuidString == passwordId }) {
                         self?.passwords.remove(at: index)
+                        self?.passwordVisibility.removeValue(forKey: UUID(uuidString: passwordId)!)
                     }
                     self?.showAlert = false
                 } else if let errorMessage = errorMessage {
@@ -120,7 +125,7 @@ class PasswordListViewModel: ObservableObject, PasswordListDelegate {
                         if let index = self.passwords.firstIndex(where: { $0.id == password.id }) {
                             self.passwords[index].password = decryptedPassword
                             self.passwords[index].isDecrypted = true
-                            self.passwordVisibility[password.id] = true
+                            self.passwordVisibility[password.id] = false // Set visibility to false when decrypted
                         }
                         completion(true)
                     } else {
