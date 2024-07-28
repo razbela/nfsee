@@ -27,28 +27,58 @@
 
 ## How to Run
 
-### Vault Server
+### (Phase_1) Virtual Env
+ 
+
+cd path/to/your/project/nfsee
+python3 -m venv venv
+source venv/bin/activate
+
+### (Phase_2) Config
+
+Navigate to the project directory and modify the config :
+
+vim path/to/your/project/nfsee/models/config.json
+
+----vim models/config.json-----
+
+"serverIPAddress": "",
+"serverPort": ""
+
+### (Phase_3) Vault Server (Remote vault) *cli_1
 Start the Vault server in development mode :
 
 vault server -dev -dev-listen-address="127.0.0.1:8200"
 
-### Backend Server
+if port is used :
+lsof -i :$(port_number)  
+kill -9 pid
+
+Copy Unseal Key & Root Token to .env file
+
+### (Phase_4) Backend Server (Local vault) *cli_2
+
+open venv
+source venv/bin/activate
 
 Navigate to the project directory and run the backend server :
-
 cd path/to/your/project/nfsee
+
+install requirements and deploy local server
+
+pip install -r requirements.txt
 python3 main.py
 
-### Remote Vault 
+### Remote Vault Debug *window_1
 
 Navigate to the remote vault, enter token to access & check password store
 http://127.0.0.1:8200/ui/vault/auth?redirect_to=%2Fvault%2Fsecrets%2Fsecret%2Fconfiguration&with=token
 
-### Local Vault
+### Local Vault Debug *window_2
 
-Navigate to the local vault, by database app like DB Browser for SQLite
+Navigate to the local vault, with database app like DB Browser for SQLite
 
-### ios App
+### ios App *window_3
 
 Open the nfsee project in Xcode.
 Select your target device or simulator.

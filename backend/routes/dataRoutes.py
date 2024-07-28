@@ -100,6 +100,7 @@ def get_passwords():
 @jwt_required()
 def get_password(password_id):
     try:
+        print(f"Fetching password with ID: {password_id}")  # Log the incoming ID
         user_id = get_jwt_identity()
         user = User.query.get(user_id)
 
@@ -113,6 +114,7 @@ def get_password(password_id):
         password = StoredPassword.query.filter_by(id=password_id.lower(), local_vault_id=local_vault.id).first()
 
         if not password:
+            print(f"Password with ID {password_id} not found")  # Log if password not found
             return jsonify({"message": "Password not found"}), 404
 
         password_data = {

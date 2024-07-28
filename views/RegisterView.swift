@@ -7,7 +7,8 @@ struct RegisterView: View {
     @Binding var isRegistering: Bool
     @Binding var isLoggedIn: Bool
     @EnvironmentObject var nfcViewModel: NFCViewModel
-    
+    @State private var isRegisteringAttempt = false  
+
     var body: some View {
         ZStack {
             AppColors.green.edgesIgnoringSafeArea(.all)
@@ -65,13 +66,14 @@ struct RegisterView: View {
                 
                 Button(action: startRegistration) {
                     Text("Register")
-                        .font(.title3) // Smaller font size
-                        .padding(10) // Smaller padding
+                        .font(.title3)
+                        .padding(10)
                         .background(AppColors.black)
                         .foregroundColor(AppColors.white)
                         .cornerRadius(4)
                 }
                 .padding()
+                .disabled(isRegisteringAttempt)  // Disable button if registration is in progress
                 
                 Button(action: {
                     isRegistering.toggle()
@@ -98,11 +100,16 @@ struct RegisterView: View {
             errorMessage = "Please fill out both fields."
             return
         }
+        guard !isRegisteringAttempt else { return }  // Prevent multiple registration attempts
+        
+        isRegisteringAttempt = true  // Set flag to true to indicate registration is in progress
+        
         nfcViewModel.startNFCSession(writing: true) { _, uid in  // Start NFC session to get UID
             if let uid = uid {
                 completeRegistration(nfcUid: uid)
             } else {
                 errorMessage = "Failed to read NFC UID."
+                isRegisteringAttempt = false  // Reset flag if NFC UID read fails
             }
         }
     }
@@ -123,16 +130,24 @@ struct RegisterView: View {
             request.httpBody = try JSONSerialization.data(withJSONObject: registerData, options: [])
         } catch {
             print("Error serializing register data: \(error.localizedDescription)")
+            isRegisteringAttempt = false  // Reset flag if serialization fails
             return
         }
         
         URLSession.shared.dataTask(with: request) { data, response, error in
             if let error = error {
                 print("Error during registration: \(error.localizedDescription)")
+                DispatchQueue.main.async {
+                    self.errorMessage = "Error during registration: \(error.localizedDescription)"
+                }
+                isRegisteringAttempt = false  // Reset flag if network error occurs
                 return
             }
             
-            guard let data = data else { return }
+            guard let data = data else {
+                isRegisteringAttempt = false  // Reset flag if no data received
+                return
+            }
             
             if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 201 {
                 do {
@@ -149,10 +164,11 @@ struct RegisterView: View {
             } else {
                 if let httpResponse = response as? HTTPURLResponse {
                     DispatchQueue.main.async {
-                        errorMessage = "Registration failed: \(HTTPURLResponse.localizedString(forStatusCode: httpResponse.statusCode))"
+                        self.errorMessage = "Registration failed: \(HTTPURLResponse.localizedString(forStatusCode: httpResponse.statusCode))"
                     }
                 }
             }
+            isRegisteringAttempt = false  // Reset flag after registration attempt completes
         }.resume()
     }
 }

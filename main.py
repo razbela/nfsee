@@ -3,10 +3,10 @@ import os
 
 # Set the path to include the backend directory
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), 'backend')))
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__))))  # Add this line
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__))))
 
 from backend.server import create_app
-from config import Config  # Make sure this import is correct
+from config import Config  
 
 app = create_app()
 

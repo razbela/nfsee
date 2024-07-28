@@ -6,8 +6,9 @@ from flask_bcrypt import Bcrypt
 from flask_jwt_extended import JWTManager
 from dotenv import load_dotenv
 
-# Load environment variables from .env file
-load_dotenv()
+# Load environment variables from vault.env file
+env_path = os.path.abspath(os.path.join(os.path.dirname(__file__), 'vault.env'))
+load_dotenv(dotenv_path=env_path)
 
 # Print to verify environment variables are loaded
 print("VAULT_ADDR:", os.getenv('VAULT_ADDR'))
@@ -59,7 +60,3 @@ if __name__ == "__main__":
         app.run(debug=True)
     except Exception as e:
         print(f"An error occurred: {e}")
-
-
-
-

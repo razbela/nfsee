@@ -30,6 +30,7 @@
 		E97587A92C54DF4C003E5AF7 /* config.py in Resources */ = {isa = PBXBuildFile; fileRef = E97587A82C54DF4C003E5AF7 /* config.py */; };
 		E97587AB2C54E00B003E5AF7 /* __init__.py in Resources */ = {isa = PBXBuildFile; fileRef = E97587AA2C54E00B003E5AF7 /* __init__.py */; };
 		E97587AD2C552FD3003E5AF7 /* Readme.md in Resources */ = {isa = PBXBuildFile; fileRef = E97587AC2C552FD3003E5AF7 /* Readme.md */; };
+		E97587AF2C553E7F003E5AF7 /* requirements.txt in Resources */ = {isa = PBXBuildFile; fileRef = E97587AE2C553E7F003E5AF7 /* requirements.txt */; };
 		E9998D292C38A5DB002E8D20 /* PasswordListDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9998D282C38A5DB002E8D20 /* PasswordListDelegate.swift */; };
 		E99FBE152C43F51300126E71 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E99FBE142C43F51300126E71 /* LoginView.swift */; };
 		E99FBE172C43F58F00126E71 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E99FBE162C43F58F00126E71 /* LoadingView.swift */; };
@@ -88,6 +89,7 @@
 		E97587A82C54DF4C003E5AF7 /* config.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = config.py; sourceTree = "<group>"; };
 		E97587AA2C54E00B003E5AF7 /* __init__.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = __init__.py; sourceTree = "<group>"; };
 		E97587AC2C552FD3003E5AF7 /* Readme.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Readme.md; sourceTree = "<group>"; };
+		E97587AE2C553E7F003E5AF7 /* requirements.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = requirements.txt; sourceTree = "<group>"; };
 		E9998D282C38A5DB002E8D20 /* PasswordListDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordListDelegate.swift; sourceTree = "<group>"; };
 		E99FBE142C43F51300126E71 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		E99FBE162C43F58F00126E71 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
@@ -95,7 +97,6 @@
 		E99FBE1A2C44028F00126E71 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
 		E99FBE1C2C4402C500126E71 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		E99FBE1E2C440DB900126E71 /* __init__.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = __init__.py; sourceTree = "<group>"; };
-		E99FBE202C440DBE00126E71 /* __init__.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = __init__.py; sourceTree = "<group>"; };
 		E99FBE222C440DC000126E71 /* __init__.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = __init__.py; sourceTree = "<group>"; };
 		E99FBE242C440DC700126E71 /* __init__.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = __init__.py; sourceTree = "<group>"; };
 		E99FBE262C440DD000126E71 /* __init__.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = __init__.py; sourceTree = "<group>"; };
@@ -106,8 +107,6 @@
 		E9A221EB2C134DF8000F5004 /* server.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = server.py; sourceTree = "<group>"; };
 		E9A221F12C134E7B000F5004 /* authRoutes.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = authRoutes.py; sourceTree = "<group>"; };
 		E9A221F52C134EDA000F5004 /* dataRoutes.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = dataRoutes.py; sourceTree = "<group>"; };
-		E9A221F72C134F41000F5004 /* authController.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = authController.py; sourceTree = "<group>"; };
-		E9A221F92C134F63000F5004 /* dataController.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = dataController.py; sourceTree = "<group>"; };
 		E9A221FB2C134F76000F5004 /* secretModel.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = secretModel.py; sourceTree = "<group>"; };
 		E9A221FD2C134F8A000F5004 /* vaultConfig.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = vaultConfig.py; sourceTree = "<group>"; };
 		E9D2C00F2C14EC58009DFC25 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
@@ -141,9 +140,9 @@
 		E951E7362BCD7A2600E55A35 = {
 			isa = PBXGroup;
 			children = (
+				E97587AE2C553E7F003E5AF7 /* requirements.txt */,
 				E97587AC2C552FD3003E5AF7 /* Readme.md */,
 				E97587A82C54DF4C003E5AF7 /* config.py */,
-				E97587A42C527FBA003E5AF7 /* vault.env */,
 				E99FBE282C44135C00126E71 /* main.py */,
 				E99FBE2A2C44154700126E71 /* __init__.py */,
 				E951E7712BCD8A8E00E55A35 /* models */,
@@ -259,8 +258,8 @@
 		E9A221EA2C134C3B000F5004 /* backend */ = {
 			isa = PBXGroup;
 			children = (
+				E97587A42C527FBA003E5AF7 /* vault.env */,
 				E9A221EF2C134E60000F5004 /* config */,
-				E9A221EE2C134E60000F5004 /* controllers */,
 				E9A221F02C134E60000F5004 /* models */,
 				E9A221ED2C134E60000F5004 /* routes */,
 				E99FBE262C440DD000126E71 /* __init__.py */,
@@ -277,16 +276,6 @@
 				E9A221F52C134EDA000F5004 /* dataRoutes.py */,
 			);
 			path = routes;
-			sourceTree = "<group>";
-		};
-		E9A221EE2C134E60000F5004 /* controllers */ = {
-			isa = PBXGroup;
-			children = (
-				E99FBE202C440DBE00126E71 /* __init__.py */,
-				E9A221F72C134F41000F5004 /* authController.py */,
-				E9A221F92C134F63000F5004 /* dataController.py */,
-			);
-			path = controllers;
 			sourceTree = "<group>";
 		};
 		E9A221EF2C134E60000F5004 /* config */ = {
@@ -417,6 +406,7 @@
 				E951E74A2BCD7A2800E55A35 /* Preview Assets.xcassets in Resources */,
 				E97587A72C54DBD0003E5AF7 /* config.json in Resources */,
 				E99FBE292C44135C00126E71 /* main.py in Resources */,
+				E97587AF2C553E7F003E5AF7 /* requirements.txt in Resources */,
 				E97587AD2C552FD3003E5AF7 /* Readme.md in Resources */,
 				E951E7472BCD7A2800E55A35 /* Assets.xcassets in Resources */,
 			);
