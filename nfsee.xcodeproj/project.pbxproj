@@ -41,6 +41,7 @@
 		E99FBE2C2C4415F200126E71 /* NFCViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E91B0B942C1B0F3B009FB9B3 /* NFCViewModel.swift */; };
 		E9A221E72C134B3E000F5004 /* APIResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9A221E62C134B3E000F5004 /* APIResponse.swift */; };
 		E9A221E92C134B59000F5004 /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9A221E82C134B59000F5004 /* NetworkService.swift */; };
+		E9D723682C56586900A73C60 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = E9D723672C56586900A73C60 /* .gitignore */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -110,6 +111,7 @@
 		E9A221FB2C134F76000F5004 /* secretModel.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = secretModel.py; sourceTree = "<group>"; };
 		E9A221FD2C134F8A000F5004 /* vaultConfig.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = vaultConfig.py; sourceTree = "<group>"; };
 		E9D2C00F2C14EC58009DFC25 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		E9D723672C56586900A73C60 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -140,6 +142,7 @@
 		E951E7362BCD7A2600E55A35 = {
 			isa = PBXGroup;
 			children = (
+				E9D723672C56586900A73C60 /* .gitignore */,
 				E97587AE2C553E7F003E5AF7 /* requirements.txt */,
 				E97587AC2C552FD3003E5AF7 /* Readme.md */,
 				E97587A82C54DF4C003E5AF7 /* config.py */,
@@ -400,6 +403,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E9D723682C56586900A73C60 /* .gitignore in Resources */,
 				E97587A92C54DF4C003E5AF7 /* config.py in Resources */,
 				E97587A52C527FBA003E5AF7 /* vault.env in Resources */,
 				E97587AB2C54E00B003E5AF7 /* __init__.py in Resources */,

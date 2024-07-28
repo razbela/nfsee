@@ -1,0 +1,34 @@
+# Ignore Python bytecode files
+__pycache__/
+*.py[cod]
+*$py.class
+# Ignore Xcode user data
+*.xcuserdatad
+*.xcuserdata
+
+# Ignore virtual environment directories
+venv/
+.env/
+
+# Ignore SQLite database files
+*.db
+
+# Ignore reports and logs
+*.log
+*.report
+
+# Ignore Xcode specific files
+*.xcdebugger
+*.bfg-report
+
+# Ignore system files
+.DS_Store
+Thumbs.db
+
+# Ignore compiled C extensions
+*.so
+
+# Ignore directories created by tools
+xcdebugger/
+bfg-report/
+
