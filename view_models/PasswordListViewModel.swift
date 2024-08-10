@@ -43,6 +43,7 @@ class PasswordListViewModel: ObservableObject, PasswordListDelegate {
                 DispatchQueue.main.async {
                     self.passwords.append(encryptedPassword)
                     self.passwordVisibility[encryptedPassword.id] = false
+                    print("Password added locally with ID: \(encryptedPassword.id)")
                 }
                 NetworkService.shared.addPassword(encryptedPassword) { success, errorMessage in
                     if !success {
@@ -50,6 +51,8 @@ class PasswordListViewModel: ObservableObject, PasswordListDelegate {
                             self.alertMessage = "Failed to add password to server."
                             self.showAlert = true
                         }
+                    } else {
+                        print("Password added to server with ID: \(encryptedPassword.id)")
                     }
                 }
             } else {
@@ -92,6 +95,7 @@ class PasswordListViewModel: ObservableObject, PasswordListDelegate {
     func toggleEncryption(for password: PasswordItem, completion: @escaping (Bool) -> Void) {
         if password.isDecrypted {
             // Lock the password (Fetch the encrypted password from the local vault)
+            print("Fetching password with ID (to lock): \(password.id)") // Add this line
             NetworkService.shared.fetchPassword(by: password.id) { [weak self] encryptedPassword, errorMessage in
                 DispatchQueue.main.async {
                     if let encryptedPassword = encryptedPassword {
@@ -119,6 +123,7 @@ class PasswordListViewModel: ObservableObject, PasswordListDelegate {
                     }
                     return
                 }
+                print("Decrypting password with ID: \(password.id)") // Add this line
                 let key = SymmetricKey(data: keyData)
                 if let decryptedData = self.encryptionService.decrypt(data: Data(base64Encoded: password.password) ?? Data(), key: key) {
                     if let decryptedPassword = String(data: decryptedData, encoding: .utf8) {
@@ -145,6 +150,7 @@ class PasswordListViewModel: ObservableObject, PasswordListDelegate {
             }
         }
     }
+
 
     private func startNFCSession(writing: Bool, completion: @escaping (Data?, String?) -> Void) {
         print("Starting NFC session - Writing: \(writing)")

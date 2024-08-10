@@ -6,9 +6,10 @@ struct PasswordsResponse: Codable {
 
 class NetworkService {
     static let shared = NetworkService()
+    
     private var baseURL: String {
-            return "http://\(Config.shared.serverIPAddress):\(Config.shared.serverPort)"
-        }
+        return "http://\(Config.shared.serverIPAddress):\(Config.shared.serverPort)"
+    }
 
     private init() {}
 
@@ -76,8 +77,12 @@ class NetworkService {
         }
     }
 
+
     func fetchPassword(by id: UUID, completion: @escaping (String?, String?) -> Void) {
-        guard let url = URL(string: "\(baseURL)/passwords/\(id.uuidString)") else {
+        let uuidString = id.uuidString.lowercased()
+        print("Requesting password with ID: \(uuidString)")
+
+        guard let url = URL(string: "\(baseURL)/passwords/\(uuidString)") else {
             completion(nil, "Invalid URL")
             return
         }
@@ -111,6 +116,8 @@ class NetworkService {
         }.resume()
     }
 
+
+
     func deletePassword(_ passwordId: String, completion: @escaping (Bool, String?) -> Void) {
         guard let url = URL(string: "\(baseURL)/passwords/\(passwordId)") else {
             completion(false, "Invalid URL")
@@ -130,6 +137,7 @@ class NetworkService {
                 completion(false, error?.localizedDescription ?? "Unknown error")
                 return
             }
+            print("Password deleted with ID: \(passwordId)")
             completion(true, nil)
         }.resume()
     }

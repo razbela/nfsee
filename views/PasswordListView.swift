@@ -55,6 +55,7 @@ struct PasswordListView: View {
                                 }
                                 
                                 Button(action: {
+                                    print("Toggling encryption for password ID: \(password.id)") // Add this line
                                     passwordListViewModel.toggleEncryption(for: password) { success in
                                         if success {
                                             withAnimation(.easeInOut) {

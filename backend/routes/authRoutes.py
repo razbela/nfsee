@@ -24,9 +24,9 @@ def register():
         if existing_user:
             return jsonify({'message': 'User already exists'}), 409
 
-         Check if the NFC UID already exists
-         existing_nfc_uid = User.query.filter_by(nfc_uid=nfc_uid).first()
-         if existing_nfc_uid:
+        # Check if the NFC UID already exists
+        existing_nfc_uid = User.query.filter_by(nfc_uid=nfc_uid).first()
+        if existing_nfc_uid:
             return jsonify({'message': 'NFC UID already exists'}), 409
 
         # Hash the password and create a new user

@@ -11,9 +11,13 @@ data_bp = Blueprint('data_bp', __name__)
 def add_password():
     try:
         data = request.get_json()
+        password_id = data.get('id')  # Get the UUID from the client
         title = data.get('title')
         username = data.get('username')
         password = data.get('password')
+
+        if not password_id or not title or not username or not password:
+            return jsonify({"message": "Missing id, title, username, or password"}), 400
 
         user_id = get_jwt_identity()
         user = User.query.get(user_id)
@@ -21,18 +25,14 @@ def add_password():
         if not user:
             return jsonify({"message": "User not found"}), 404
 
-        if not title or not username or not password:
-            return jsonify({"message": "Missing title, username, or password"}), 400
-
         local_vault = user.local_vault
-
         if not local_vault:
             local_vault = LocalVault(user_id=user.id)
             db.session.add(local_vault)
             db.session.commit()
 
         new_password = StoredPassword(
-            id=str(uuid.uuid4()).lower(),
+            id=password_id.lower(),
             title=title,
             username=username,
             password=password,
@@ -42,6 +42,8 @@ def add_password():
 
         db.session.add(new_password)
         db.session.commit()
+
+        print(f"New password added with ID: {new_password.id}")
 
         # Store the password in HashiCorp Vault
         try:
@@ -63,6 +65,7 @@ def add_password():
         db.session.rollback()
         print("Error adding password:", str(e))
         return jsonify({"message": "Error adding password", "error": str(e)}), 500
+
 
 @data_bp.route('/passwords', methods=['GET'])
 @jwt_required()
@@ -102,8 +105,9 @@ def get_password(password_id):
     try:
         print(f"Fetching password with ID: {password_id}")  # Log the incoming ID
         user_id = get_jwt_identity()
-        user = User.query.get(user_id)
+        print(f"User ID: {user_id}")  # Log the user ID
 
+        user = User.query.get(user_id)
         if not user:
             return jsonify({"message": "User not found"}), 404
 
