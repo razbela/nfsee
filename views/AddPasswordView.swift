@@ -1,4 +1,5 @@
 import SwiftUI
+import Navajo_Swift
 
 struct AddPasswordView: View {
     @ObservedObject var viewModel: AddPasswordViewModel
@@ -6,6 +7,7 @@ struct AddPasswordView: View {
     @State private var title = ""
     @State private var username = ""
     @State private var password = ""
+    @State private var passwordStrength: PasswordStrength = .veryWeak
     
     var body: some View {
         NavigationView {
@@ -34,6 +36,31 @@ struct AddPasswordView: View {
                         TextField("Title", text: $title)
                         TextField("Username", text: $username)
                         SecureField("Password", text: $password)
+                            .onChange(of: password) { newPassword in
+                                withAnimation {
+                                    passwordStrength = Navajo.strength(ofPassword: newPassword)
+                                }
+                            }
+                        
+                        // Password Strength Indicator
+                        VStack(alignment: .leading) {
+                            Text("Password Strength: \(passwordStrengthText)")
+                                .foregroundColor(passwordStrengthColor)
+                                .animation(.easeInOut, value: passwordStrengthColor)
+                            
+                            ProgressView(value: passwordStrengthProgress)
+                                .progressViewStyle(LinearProgressViewStyle(tint: passwordStrengthColor))
+                                .animation(.easeInOut, value: passwordStrengthProgress)
+                            
+                            // Suggestion if password is weak
+                            if passwordStrength == .veryWeak || passwordStrength == .weak {
+                                Text("Try using a longer password with a mix of letters, numbers, and symbols.")
+                                    .font(.footnote)
+                                    .foregroundColor(.red)
+                                    .transition(.slide)
+                            }
+                        }
+                        .padding(.top, 10)
                     }
                     .listRowBackground(AppColors.white) // Set the background color of the form rows
                 }
@@ -51,6 +78,37 @@ struct AddPasswordView: View {
                 }
                 .foregroundColor(AppColors.black))
             }
+        }
+    }
+    
+    // Helper computed properties for password strength
+    var passwordStrengthText: String {
+        switch passwordStrength {
+        case .veryWeak: return "Very Weak"
+        case .weak: return "Weak"
+        case .reasonable: return "Reasonable"
+        case .strong: return "Strong"
+        case .veryStrong: return "Very Strong"
+        }
+    }
+    
+    var passwordStrengthColor: Color {
+        switch passwordStrength {
+        case .veryWeak: return AppColors.red
+        case .weak: return .orange
+        case .reasonable: return .yellow
+        case .strong: return AppColors.green
+        case .veryStrong: return .blue
+        }
+    }
+    
+    var passwordStrengthProgress: Double {
+        switch passwordStrength {
+        case .veryWeak: return 0.2
+        case .weak: return 0.4
+        case .reasonable: return 0.6
+        case .strong: return 0.8
+        case .veryStrong: return 1.0
         }
     }
 }
