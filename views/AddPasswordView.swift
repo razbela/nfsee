@@ -43,24 +43,29 @@ struct AddPasswordView: View {
                             }
                         
                         // Password Strength Indicator
-                        VStack(alignment: .leading) {
-                            Text("Password Strength: \(passwordStrengthText)")
-                                .foregroundColor(passwordStrengthColor)
-                                .animation(.easeInOut, value: passwordStrengthColor)
-                            
-                            ProgressView(value: passwordStrengthProgress)
-                                .progressViewStyle(LinearProgressViewStyle(tint: passwordStrengthColor))
-                                .animation(.easeInOut, value: passwordStrengthProgress)
-                            
-                            // Suggestion if password is weak
-                            if passwordStrength == .veryWeak || passwordStrength == .weak {
-                                Text("Try using a longer password with a mix of letters, numbers, and symbols.")
-                                    .font(.footnote)
-                                    .foregroundColor(.red)
-                                    .transition(.slide)
+                        if !password.isEmpty {
+                            VStack(alignment: .leading) {
+                                Text("Password Strength: \(passwordStrengthText)")
+                                    .foregroundColor(passwordStrengthColor)
+                                    .animation(.easeInOut, value: passwordStrengthColor)
+                                
+                                ProgressView(value: passwordStrengthProgress)
+                                    .progressViewStyle(LinearProgressViewStyle(tint: passwordStrengthColor))
+                                    .animation(.easeInOut, value: passwordStrengthProgress)
+                                
+                                // Suggestion if password is weak
+                                if passwordStrength == .veryWeak || passwordStrength == .weak {
+                                    Text("Try using a longer password with a mix of letters, numbers, and symbols.")
+                                        .font(.footnote)
+                                        .foregroundColor(.red)
+                                        .transition(.slide)
+                                }
                             }
+                            .padding(.top, 10)
+                        } else {
+                            ProgressView(value: 0.0)
+                                .progressViewStyle(LinearProgressViewStyle(tint: .gray))
                         }
-                        .padding(.top, 10)
                     }
                     .listRowBackground(AppColors.white) // Set the background color of the form rows
                 }
@@ -103,6 +108,9 @@ struct AddPasswordView: View {
     }
     
     var passwordStrengthProgress: Double {
+        if password.isEmpty {
+            return 0.0
+        }
         switch passwordStrength {
         case .veryWeak: return 0.2
         case .weak: return 0.4
