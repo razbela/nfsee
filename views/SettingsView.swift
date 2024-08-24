@@ -1,91 +1,96 @@
 import SwiftUI
 import UIKit
+import CoreNFC
+import CryptoKit
+import LocalAuthentication
 
 struct SettingsView: View {
     @State private var serverIPAddress: String = Config.shared.serverIPAddress
     @State private var serverPort: String = Config.shared.serverPort
     @Environment(\.presentationMode) var presentationMode
     @EnvironmentObject var passwordListViewModel: PasswordListViewModel
+    @EnvironmentObject var nfcViewModel: NFCViewModel
     @State private var showingDocumentPicker = false
-    
+    @State private var storedNFCKey: String?
+    @State private var showingSecretKeyAlert = false
+
     var body: some View {
-        ZStack {
-            AppColors.black.edgesIgnoringSafeArea(.all)
-            VStack {
-                Text("Settings")
-                    .font(.largeTitle)
-                    .foregroundColor(AppColors.white)
-                    .padding(.top, 20)
-                
-                VStack(spacing: 16) {
-                    TextField("Server IP Address", text: $serverIPAddress)
-                        .padding()
-                        .background(AppColors.white)
-                        .cornerRadius(6)
-                        .foregroundColor(AppColors.black)
-                        .padding(.horizontal)
+            ZStack {
+                AppColors.black.edgesIgnoringSafeArea(.all)
+                VStack {
+                    Text("Settings")
+                        .font(.largeTitle)
+                        .foregroundColor(AppColors.white)
+                        .padding(.top, 20)
                     
-                    TextField("Server Port", text: $serverPort)
+                    Button(action: authenticateAndCopyNFCKey) {
+                        HStack {
+                            Image(systemName: "doc.on.doc.fill")
+                            Text("Copy NFC Key")
+                        }
+                        .font(.title)
                         .padding()
+                        .frame(maxWidth: .infinity)
                         .background(AppColors.white)
-                        .cornerRadius(6)
-                        .shadow(radius: 2)
                         .foregroundColor(AppColors.black)
-                        .padding(.horizontal)
-                }
-                .padding(.top, 20)
-                
-                Button(action: exportPasswords) {
-                    HStack {
-                        Image(systemName: "square.and.arrow.up") // Export icon
-                        Text("Export Passwords")
+                        .cornerRadius(9)
                     }
-                    .font(.title)
-                    .padding()
-                    .frame(maxWidth: .infinity)
-                    .background(AppColors.white)
-                    .foregroundColor(AppColors.black)
-                    .cornerRadius(9)
-                }
-                .padding(.top, 10)
-                
-                Button(action: importPasswords) {
-                    HStack {
-                        Image(systemName: "square.and.arrow.down") // Import icon
-                        Text("Import Passwords")
+                    .padding(.top, 10)
+                    
+                    Button(action: exportPasswords) {
+                        HStack {
+                            Image(systemName: "square.and.arrow.up")
+                            Text("Export Passwords")
+                        }
+                        .font(.title)
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(AppColors.white)
+                        .foregroundColor(AppColors.black)
+                        .cornerRadius(9)
                     }
-                    .font(.title)
-                    .padding()
-                    .frame(maxWidth: .infinity)
-                    .background(AppColors.white)
-                    .foregroundColor(AppColors.black)
-                    .cornerRadius(9)
-                }
-                .padding(.top, 10)
-                
-                Spacer() // Push the Save button to the bottom
-                
-                Button(action: saveSettings) {
-                    HStack {
-                        Image(systemName: "tray.and.arrow.down") // Save icon
-                        Text("Save")
+                    .padding(.top, 10)
+                    
+                    Button(action: importPasswords) {
+                        HStack {
+                            Image(systemName: "square.and.arrow.down")
+                            Text("Import Passwords")
+                        }
+                        .font(.title)
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(AppColors.white)
+                        .foregroundColor(AppColors.black)
+                        .cornerRadius(9)
                     }
-                    .font(.title)
-                    .padding()
-                    .frame(maxWidth: .infinity)
-                    .background(AppColors.white)
-                    .foregroundColor(AppColors.black)
-                    .cornerRadius(9)
+                    .padding(.top, 10)
+
+                    Spacer()
+                    
+                    Button(action: saveSettings) {
+                        HStack {
+                            Image(systemName: "tray.and.arrow.down")
+                            Text("Save")
+                        }
+                        .font(.title)
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(AppColors.white)
+                        .foregroundColor(AppColors.black)
+                        .cornerRadius(9)
+                    }
+                    .padding(.horizontal)
+                    .padding(.bottom, 20)
                 }
                 .padding(.horizontal)
-                .padding(.bottom, 20) // Add padding to the bottom
             }
-            .padding(.horizontal)
+            .sheet(isPresented: $showingDocumentPicker) {
+                DocumentPicker(didPickDocuments: handleDocumentPicker)
+            }
+            .alert(isPresented: $showingSecretKeyAlert) {
+                Alert(title: Text("Important"), message: Text("Store this key in a very secret place just in case."), dismissButton: .default(Text("OK")))
+            }
         }
-        .sheet(isPresented: $showingDocumentPicker) {
-            DocumentPicker(didPickDocuments: handleDocumentPicker)
-        }
-    }
     
     func saveSettings() {
         Config.shared.serverIPAddress = serverIPAddress
@@ -125,7 +130,6 @@ struct SettingsView: View {
     func handleDocumentPicker(urls: [URL]) {
         guard let selectedFileURL = urls.first else { return }
 
-        // Start accessing the security-scoped resource
         guard selectedFileURL.startAccessingSecurityScopedResource() else {
             print("Couldn't access the security-scoped resource.")
             return
@@ -139,23 +143,47 @@ struct SettingsView: View {
             let data = try Data(contentsOf: selectedFileURL)
             let importedPasswords = try JSONDecoder().decode([PasswordItem].self, from: data)
             
-            // POST passwords to remote vault using NetworkService
-            for password in importedPasswords {
-                NetworkService.shared.addPassword(password) { success, error in
-                    if success {
-                        DispatchQueue.main.async {
-                            // Save passwords to local vault
-                            passwordListViewModel.passwords.append(password)
-                        }
-                    } else {
-                        print("Failed to post password to remote vault: \(error ?? "Unknown error")")
-                    }
-                }
-            }
+            passwordListViewModel.passwords.append(contentsOf: importedPasswords)
         } catch {
             print("Error importing passwords: \(error)")
         }
     }
+    
+    private func authenticateAndCopyNFCKey() {
+           let context = LAContext()
+           var error: NSError?
+           
+           if context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error) {
+               context.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, localizedReason: "Access requires authentication") { success, authenticationError in
+                   DispatchQueue.main.async {
+                       if success {
+                           copyNFCKey()
+                       } else {
+                           nfcViewModel.alertMessage = "Authentication failed: \(authenticationError?.localizedDescription ?? "Unknown error")"
+                           nfcViewModel.showAlert = true
+                       }
+                   }
+               }
+           } else {
+               nfcViewModel.alertMessage = "Biometric authentication not available: \(error?.localizedDescription ?? "Unknown reason")"
+               nfcViewModel.showAlert = true
+           }
+       }
+
+       func copyNFCKey() {
+           nfcViewModel.startNFCSession(writing: false) { keyData, _ in
+               guard let keyData = keyData else {
+                   DispatchQueue.main.async {
+                       nfcViewModel.alertMessage = "Failed to read key from NFC."
+                       nfcViewModel.showAlert = true
+                   }
+                   return
+               }
+               let keyString = keyData.base64EncodedString()
+               UIPasteboard.general.string = keyString
+               showingSecretKeyAlert = true
+           }
+       }
     
     func getDocumentsDirectory() -> URL {
         return FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
@@ -164,6 +192,8 @@ struct SettingsView: View {
 
 struct SettingsView_Previews: PreviewProvider {
     static var previews: some View {
-        SettingsView().environmentObject(PasswordListViewModel())
+        SettingsView()
+            .environmentObject(PasswordListViewModel())
+            .environmentObject(NFCViewModel())
     }
 }

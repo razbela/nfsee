@@ -13,7 +13,8 @@ struct PasswordListView: View {
                         ForEach(passwordListViewModel.passwords) { password in
                             HStack {
                                 VStack(alignment: .leading) {
-                                    if passwordListViewModel.passwordVisibility[password.id] == true && password.isDecrypted {
+                                    if password.isDecrypted && (passwordListViewModel.passwordVisibility[password.id] ?? false) {
+                                        // Password is decrypted and visibility is toggled on
                                         Text(password.username)
                                             .font(.headline)
                                             .padding(.bottom, 3)
@@ -22,6 +23,7 @@ struct PasswordListView: View {
                                             .font(.subheadline)
                                             .foregroundColor(AppColors.white)
                                     } else {
+                                        // Show only title and username
                                         Text(password.title)
                                             .font(.headline)
                                             .padding(.bottom, 3)
@@ -32,18 +34,11 @@ struct PasswordListView: View {
                                     }
                                 }
                                 Spacer()
-                                Button(action: {
-                                    copyPasswordToClipboard(password)
-                                }) {
-                                    Image(systemName: "doc.on.doc.fill")
-                                        .foregroundColor(.white)
-                                        .font(.system(size: 22))
-                                        .padding(.trailing, 5)
-                                }
-                                .buttonStyle(PlainButtonStyle())
-                                
+
+                                // Only show the "eye" button if the password is decrypted
                                 if password.isDecrypted {
                                     Button(action: {
+                                        // Toggle visibility
                                         passwordListViewModel.passwordVisibility[password.id] = !(passwordListViewModel.passwordVisibility[password.id] ?? false)
                                     }) {
                                         Image(systemName: (passwordListViewModel.passwordVisibility[password.id] ?? false) ? "eye.slash.fill" : "eye.fill")
@@ -52,17 +47,22 @@ struct PasswordListView: View {
                                             .padding(.trailing, 5)
                                     }
                                     .buttonStyle(PlainButtonStyle())
-                                }
-                                
-                                Button(action: {
-                                    print("Toggling encryption for password ID: \(password.id)") // Add this line
-                                    passwordListViewModel.toggleEncryption(for: password) { success in
-                                        if success {
-                                            withAnimation(.easeInOut) {
-                                                // The state change will automatically animate due to @Published
-                                            }
-                                        }
+
+                                    // Copy button
+                                    Button(action: {
+                                        copyPasswordToClipboard(password)
+                                    }) {
+                                        Image(systemName: "doc.on.doc.fill")
+                                            .foregroundColor(.white)
+                                            .font(.system(size: 22))
+                                            .padding(.trailing, 5)
                                     }
+                                    .buttonStyle(PlainButtonStyle())
+                                }
+
+                                // Lock or unlock button
+                                Button(action: {
+                                    toggleEncryption(for: password)
                                 }) {
                                     Image(systemName: password.isDecrypted ? "lock.open.fill" : "lock.fill")
                                         .foregroundColor(password.isDecrypted ? AppColors.green : AppColors.red)
@@ -70,13 +70,13 @@ struct PasswordListView: View {
                                 }
                             }
                             .padding()
-                            .background(AppColors.black) // Set background to clear
+                            .background(AppColors.black)
                             .overlay(
                                 RoundedRectangle(cornerRadius: 2)
                                     .stroke(password.isDecrypted ? AppColors.green : AppColors.red, lineWidth: 10)
                             )
                             .contentShape(Rectangle())
-                            .listRowBackground(Color.clear) // Ensure the row background is clear
+                            .listRowBackground(Color.clear)
                         }
                         .onDelete(perform: passwordListViewModel.deletePasswords)
                         .onMove(perform: passwordListViewModel.movePasswords)
@@ -91,18 +91,15 @@ struct PasswordListView: View {
                         }
                     })
                     .onAppear {
-                        print("Passwords on appear: \(passwordListViewModel.passwords)")
                         passwordListViewModel.loadPasswords()
                     }
                     .sheet(isPresented: $showingAddPasswordView) {
-                        let addPasswordViewModel = AddPasswordViewModel(delegate: passwordListViewModel)
-                        AddPasswordView(viewModel: addPasswordViewModel)
+                        AddPasswordView(viewModel: AddPasswordViewModel(delegate: passwordListViewModel))
                     }
                 }
                 .alert(isPresented: $passwordListViewModel.showAlert) {
                     Alert(title: Text("Message"), message: Text(passwordListViewModel.alertMessage), dismissButton: .default(Text("OK")))
                 }
-
                 if let copiedPassword = copiedPassword {
                     VStack {
                         Spacer()
@@ -123,14 +120,21 @@ struct PasswordListView: View {
 
     private func copyPasswordToClipboard(_ password: PasswordItem) {
         let pasteboard = UIPasteboard.general
-        let copiedText = password.isDecrypted ? password.password : password.password
-        pasteboard.string = copiedText
+        pasteboard.string = password.password
 
         copiedPassword = password.password
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
             withAnimation(.easeInOut) {
                 copiedPassword = nil
+            }
+        }
+    }
+
+    private func toggleEncryption(for password: PasswordItem) {
+        passwordListViewModel.toggleEncryption(for: password) { success in
+            if success {
+                // Toggling will trigger a view update due to @Published properties in ViewModel
             }
         }
     }

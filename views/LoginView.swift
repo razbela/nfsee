@@ -1,4 +1,5 @@
 import SwiftUI
+import LocalAuthentication
 
 struct LoginView: View {
     @State private var username: String = ""
@@ -27,47 +28,33 @@ struct LoginView: View {
                     .foregroundColor(isLoggedIn ? .green : AppColors.red)
                 
                 VStack(spacing: 16) {
-                    ZStack(alignment: .leading) {
-                        if username.isEmpty {
-                            Text("Username")
-                                .foregroundColor(AppColors.black.opacity(0.5))
-                                .padding(7)
-                        }
-                        TextField("", text: $username)
-                            .padding(7)
-                            .background(AppColors.white)
-                            .cornerRadius(6)
-                            .shadow(radius: 2)
-                            .foregroundColor(AppColors.black)
-                            .font(.system(size: 18, weight: .medium))
-                            .padding(3)
-                    }
-                    ZStack(alignment: .leading) {
-                        if password.isEmpty {
-                            Text("Password")
-                                .foregroundColor(AppColors.black.opacity(0.5))
-                                .padding(7)
-                        }
-                        SecureField("", text: $password)
-                            .padding(7)
-                            .background(AppColors.white)
-                            .cornerRadius(6)
-                            .shadow(radius: 2)
-                            .foregroundColor(AppColors.black)
-                            .font(.system(size: 18, weight: .medium))
-                            .padding(3)
-                    }
+                    TextField("Username", text: $username)
+                        .padding()
+                        .background(AppColors.white)
+                        .cornerRadius(6)
+                        .shadow(radius: 2)
+                        .foregroundColor(AppColors.black)
+                        .font(.system(size: 18, weight: .medium))
+                    
+                    SecureField("Password", text: $password)
+                        .padding()
+                        .background(AppColors.white)
+                        .cornerRadius(6)
+                        .shadow(radius: 2)
+                        .foregroundColor(AppColors.black)
+                        .font(.system(size: 18, weight: .medium))
                 }
+                
                 if let errorMessage = errorMessage {
                     Text(errorMessage)
                         .foregroundColor(AppColors.red)
                         .padding()
                 }
                 
-                Button(action: login) {
-                    Text("Login")
+                Button(action: authenticateWithFaceID) {
+                    Text("Login with Face ID")
                         .font(.title3)
-                        .padding(10)
+                        .padding()
                         .background(AppColors.black)
                         .foregroundColor(AppColors.white)
                         .cornerRadius(4)
@@ -86,6 +73,25 @@ struct LoginView: View {
         }
     }
 
+    func authenticateWithFaceID() {
+        let context = LAContext()
+        var error: NSError?
+        
+        if context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error) {
+            context.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, localizedReason: "Access requires authentication") { success, authenticationError in
+                DispatchQueue.main.async {
+                    if success {
+                        login()
+                    } else {
+                        errorMessage = "Authentication failed: \(authenticationError?.localizedDescription ?? "Unknown error")"
+                    }
+                }
+            }
+        } else {
+            errorMessage = "Biometric authentication not available: \(error?.localizedDescription ?? "Unknown reason")"
+        }
+    }
+
     func login() {
         guard !username.isEmpty, !password.isEmpty else {
             errorMessage = "Please enter both username and password."
@@ -93,7 +99,6 @@ struct LoginView: View {
         }
 
         let loginData = ["username": username, "password": password]
-        
         let ipAddress = Config.shared.serverIPAddress
         let port = Config.shared.serverPort
         
@@ -131,19 +136,15 @@ struct LoginView: View {
                     if let jsonResponse = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
                        let token = jsonResponse["access_token"] as? String,
                        let passwordsData = jsonResponse["passwords"] as? [[String: Any]] {
-                        
-                        print("Login successful: \(jsonResponse)")
                         DispatchQueue.main.async {
                             UserDefaults.standard.set(token, forKey: "jwtToken")
                             self.isLoggedIn = true
                             self.errorMessage = nil
                             
-                            // Parse passwords and update the view model
                             let decoder = JSONDecoder()
                             if let jsonData = try? JSONSerialization.data(withJSONObject: passwordsData, options: []),
                                let passwords = try? decoder.decode([PasswordItem].self, from: jsonData) {
                                 self.passwordListViewModel.passwords = passwords
-                                print("Passwords loaded: \(passwords)")
                             } else {
                                 print("Failed to load passwords")
                             }
@@ -165,7 +166,6 @@ struct LoginView: View {
         }.resume()
     }
 }
-
 struct LoginViewWrapper: View {
     @State private var isRegistering = false
     @State private var isLoggedIn = false
