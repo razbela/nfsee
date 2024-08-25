@@ -27,18 +27,22 @@ struct ContentView: View {
             .alert(isPresented: $nfcViewModel.showAlert) {
                 Alert(title: Text("NFC Operation"), message: Text(nfcViewModel.alertMessage), dismissButton: .default(Text("OK")))
             }
-            .navigationBarItems(trailing: Button(action: {
-                showingSettings = true
-            }) {
-                Image(systemName: "gear")
-                    .foregroundColor(AppColors.black)
-                    .imageScale(.large)
-            })
-            .sheet(isPresented: $showingSettings) {
-                SettingsView()
-                    .environmentObject(passwordListViewModel)
-                    .environmentObject(nfcViewModel)  
-            }
+            .navigationBarItems(trailing: isLoggedIn ? settingsButton : nil)
+        }
+    }
+    
+    private var settingsButton: some View {
+        Button(action: {
+            showingSettings = true
+        }) {
+            Image(systemName: "gear")
+                .foregroundColor(AppColors.black)
+                .imageScale(.large)
+        }
+        .sheet(isPresented: $showingSettings) {
+            SettingsView()
+                .environmentObject(passwordListViewModel)
+                .environmentObject(nfcViewModel)
         }
     }
 }
@@ -47,7 +51,6 @@ struct ContentViewWrapper: View {
     @State private var isLoading = false
     @State private var isLoggedIn = false
     @State private var isRegistering = false
-    @State private var showingSettings = false
     @StateObject private var nfcViewModel = NFCViewModel()
     @StateObject private var passwordListViewModel = PasswordListViewModel()
 
