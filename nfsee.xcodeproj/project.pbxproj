@@ -42,6 +42,8 @@
 		E9A221E72C134B3E000F5004 /* APIResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9A221E62C134B3E000F5004 /* APIResponse.swift */; };
 		E9A221E92C134B59000F5004 /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9A221E82C134B59000F5004 /* NetworkService.swift */; };
 		E9D723682C56586900A73C60 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = E9D723672C56586900A73C60 /* .gitignore */; };
+		E9EE30BF2C6BE70E00F47A22 /* Navajo-Swift in Frameworks */ = {isa = PBXBuildFile; productRef = E9EE30BE2C6BE70E00F47A22 /* Navajo-Swift */; settings = {ATTRIBUTES = (Required, ); }; };
+		E9EE30C12C6FC91000F47A22 /* DocumentPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9EE30C02C6FC91000F47A22 /* DocumentPicker.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -112,6 +114,7 @@
 		E9A221FD2C134F8A000F5004 /* vaultConfig.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = vaultConfig.py; sourceTree = "<group>"; };
 		E9D2C00F2C14EC58009DFC25 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		E9D723672C56586900A73C60 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
+		E9EE30C02C6FC91000F47A22 /* DocumentPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentPicker.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,6 +122,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E9EE30BF2C6BE70E00F47A22 /* Navajo-Swift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -254,6 +258,7 @@
 				E99FBE182C43FD7A00126E71 /* RegisterView.swift */,
 				E99FBE1C2C4402C500126E71 /* SettingsView.swift */,
 				E92905FF2C4DB7BB003FC88F /* AppColors.swift */,
+				E9EE30C02C6FC91000F47A22 /* DocumentPicker.swift */,
 			);
 			path = views;
 			sourceTree = "<group>";
@@ -315,6 +320,9 @@
 			dependencies = (
 			);
 			name = nfsee;
+			packageProductDependencies = (
+				E9EE30BE2C6BE70E00F47A22 /* Navajo-Swift */,
+			);
 			productName = nfsee;
 			productReference = E951E73F2BCD7A2600E55A35 /* nfsee.app */;
 			productType = "com.apple.product-type.application";
@@ -387,6 +395,9 @@
 				Base,
 			);
 			mainGroup = E951E7362BCD7A2600E55A35;
+			packageReferences = (
+				E9EE30BD2C6BE49500F47A22 /* XCRemoteSwiftPackageReference "Navajo-Swift" */,
+			);
 			productRefGroup = E951E7402BCD7A2600E55A35 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -452,6 +463,7 @@
 				E99FBE152C43F51300126E71 /* LoginView.swift in Sources */,
 				E951E7822BCD8BB400E55A35 /* CoreDataService.swift in Sources */,
 				E951E7782BCD8B3500E55A35 /* AddPasswordView.swift in Sources */,
+				E9EE30C12C6FC91000F47A22 /* DocumentPicker.swift in Sources */,
 				E92906002C4DB7BB003FC88F /* AppColors.swift in Sources */,
 				E91B0B972C1B1424009FB9B3 /* PasswordListView.swift in Sources */,
 				E9A221E92C134B59000F5004 /* NetworkService.swift in Sources */,
@@ -706,6 +718,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 7LHLYT946T;
@@ -797,6 +810,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		E9EE30BD2C6BE49500F47A22 /* XCRemoteSwiftPackageReference "Navajo-Swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Wistas23/Navajo-Swift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.1.2;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		E9EE30BE2C6BE70E00F47A22 /* Navajo-Swift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E9EE30BD2C6BE49500F47A22 /* XCRemoteSwiftPackageReference "Navajo-Swift" */;
+			productName = "Navajo-Swift";
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		E951E74D2BCD7A2800E55A35 /* nfsee.xcdatamodeld */ = {
