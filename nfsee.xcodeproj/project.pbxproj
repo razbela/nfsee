@@ -24,7 +24,6 @@
 		E951E77C2BCD8B7600E55A35 /* AddPasswordViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E951E77B2BCD8B7500E55A35 /* AddPasswordViewModel.swift */; };
 		E951E77E2BCD8B8F00E55A35 /* NFCServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = E951E77D2BCD8B8F00E55A35 /* NFCServices.swift */; };
 		E951E7802BCD8BA000E55A35 /* EncryptionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E951E77F2BCD8BA000E55A35 /* EncryptionService.swift */; };
-		E951E7822BCD8BB400E55A35 /* CoreDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E951E7812BCD8BB400E55A35 /* CoreDataService.swift */; };
 		E97587A52C527FBA003E5AF7 /* vault.env in Resources */ = {isa = PBXBuildFile; fileRef = E97587A42C527FBA003E5AF7 /* vault.env */; };
 		E97587A72C54DBD0003E5AF7 /* config.json in Resources */ = {isa = PBXBuildFile; fileRef = E97587A62C54DBD0003E5AF7 /* config.json */; };
 		E97587A92C54DF4C003E5AF7 /* config.py in Resources */ = {isa = PBXBuildFile; fileRef = E97587A82C54DF4C003E5AF7 /* config.py */; };
@@ -39,7 +38,6 @@
 		E99FBE1D2C4402C500126E71 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E99FBE1C2C4402C500126E71 /* SettingsView.swift */; };
 		E99FBE292C44135C00126E71 /* main.py in Resources */ = {isa = PBXBuildFile; fileRef = E99FBE282C44135C00126E71 /* main.py */; };
 		E99FBE2C2C4415F200126E71 /* NFCViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E91B0B942C1B0F3B009FB9B3 /* NFCViewModel.swift */; };
-		E9A221E72C134B3E000F5004 /* APIResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9A221E62C134B3E000F5004 /* APIResponse.swift */; };
 		E9A221E92C134B59000F5004 /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9A221E82C134B59000F5004 /* NetworkService.swift */; };
 		E9D723682C56586900A73C60 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = E9D723672C56586900A73C60 /* .gitignore */; };
 		E9EE30BF2C6BE70E00F47A22 /* Navajo-Swift in Frameworks */ = {isa = PBXBuildFile; productRef = E9EE30BE2C6BE70E00F47A22 /* Navajo-Swift */; settings = {ATTRIBUTES = (Required, ); }; };
@@ -86,7 +84,6 @@
 		E951E77B2BCD8B7500E55A35 /* AddPasswordViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPasswordViewModel.swift; sourceTree = "<group>"; };
 		E951E77D2BCD8B8F00E55A35 /* NFCServices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NFCServices.swift; sourceTree = "<group>"; };
 		E951E77F2BCD8BA000E55A35 /* EncryptionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncryptionService.swift; sourceTree = "<group>"; };
-		E951E7812BCD8BB400E55A35 /* CoreDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataService.swift; sourceTree = "<group>"; };
 		E97587A42C527FBA003E5AF7 /* vault.env */ = {isa = PBXFileReference; lastKnownFileType = text; path = vault.env; sourceTree = "<group>"; };
 		E97587A62C54DBD0003E5AF7 /* config.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = config.json; sourceTree = "<group>"; };
 		E97587A82C54DF4C003E5AF7 /* config.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = config.py; sourceTree = "<group>"; };
@@ -105,7 +102,6 @@
 		E99FBE262C440DD000126E71 /* __init__.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = __init__.py; sourceTree = "<group>"; };
 		E99FBE282C44135C00126E71 /* main.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = main.py; sourceTree = "<group>"; };
 		E99FBE2A2C44154700126E71 /* __init__.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = __init__.py; sourceTree = "<group>"; };
-		E9A221E62C134B3E000F5004 /* APIResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIResponse.swift; sourceTree = "<group>"; };
 		E9A221E82C134B59000F5004 /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
 		E9A221EB2C134DF8000F5004 /* server.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = server.py; sourceTree = "<group>"; };
 		E9A221F12C134E7B000F5004 /* authRoutes.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = authRoutes.py; sourceTree = "<group>"; };
@@ -215,7 +211,6 @@
 			isa = PBXGroup;
 			children = (
 				E951E7752BCD8AD500E55A35 /* PasswordItem.swift */,
-				E9A221E62C134B3E000F5004 /* APIResponse.swift */,
 				E99FBE1A2C44028F00126E71 /* Config.swift */,
 				E97587A62C54DBD0003E5AF7 /* config.json */,
 				E97587AA2C54E00B003E5AF7 /* __init__.py */,
@@ -240,7 +235,6 @@
 				E951E7422BCD7A2600E55A35 /* nfseeApp.swift */,
 				E951E77D2BCD8B8F00E55A35 /* NFCServices.swift */,
 				E951E77F2BCD8BA000E55A35 /* EncryptionService.swift */,
-				E951E7812BCD8BB400E55A35 /* CoreDataService.swift */,
 				E9A221E82C134B59000F5004 /* NetworkService.swift */,
 				E9998D282C38A5DB002E8D20 /* PasswordListDelegate.swift */,
 			);
@@ -455,13 +449,11 @@
 				E951E7452BCD7A2600E55A35 /* ContentView.swift in Sources */,
 				E951E7432BCD7A2600E55A35 /* nfseeApp.swift in Sources */,
 				E951E7762BCD8AD500E55A35 /* PasswordItem.swift in Sources */,
-				E9A221E72C134B3E000F5004 /* APIResponse.swift in Sources */,
 				E951E77E2BCD8B8F00E55A35 /* NFCServices.swift in Sources */,
 				E99FBE192C43FD7A00126E71 /* RegisterView.swift in Sources */,
 				E951E74F2BCD7A2800E55A35 /* nfsee.xcdatamodeld in Sources */,
 				E951E77C2BCD8B7600E55A35 /* AddPasswordViewModel.swift in Sources */,
 				E99FBE152C43F51300126E71 /* LoginView.swift in Sources */,
-				E951E7822BCD8BB400E55A35 /* CoreDataService.swift in Sources */,
 				E951E7782BCD8B3500E55A35 /* AddPasswordView.swift in Sources */,
 				E9EE30C12C6FC91000F47A22 /* DocumentPicker.swift in Sources */,
 				E92906002C4DB7BB003FC88F /* AppColors.swift in Sources */,

@@ -9,7 +9,7 @@ struct ContentView: View {
     @State private var showingSettings = false
     
     var body: some View {
-        NavigationView {
+        NavigationView { 
             VStack {
                 if isLoggedIn {
                     PasswordListView()
