@@ -14,7 +14,6 @@ struct PasswordListView: View {
                             HStack {
                                 VStack(alignment: .leading) {
                                     if password.isDecrypted && (passwordListViewModel.passwordVisibility[password.id] ?? false) {
-                                        // Password is decrypted and visibility is toggled on
                                         Text(password.username)
                                             .font(.headline)
                                             .padding(.bottom, 3)
@@ -23,7 +22,6 @@ struct PasswordListView: View {
                                             .font(.subheadline)
                                             .foregroundColor(AppColors.white)
                                     } else {
-                                        // Show only title and username
                                         Text(password.title)
                                             .font(.headline)
                                             .padding(.bottom, 3)
@@ -35,8 +33,15 @@ struct PasswordListView: View {
                                 }
                                 Spacer()
 
-                                // Only show the "eye" button if the password is decrypted
+                                // Show countdown timer if the password is decrypted
                                 if password.isDecrypted {
+                                    if let remainingTime = passwordListViewModel.remainingTime[password.id], remainingTime > 0 {
+                                                                Text("\(remainingTime)")
+                                                                .foregroundColor(AppColors.white)
+                                                                .font(.system(size: 22))
+                                                                .padding(.trailing, 12)
+                                            }
+                                    
                                     Button(action: {
                                         // Toggle visibility
                                         passwordListViewModel.passwordVisibility[password.id] = !(passwordListViewModel.passwordVisibility[password.id] ?? false)
@@ -134,23 +139,8 @@ struct PasswordListView: View {
     private func toggleEncryption(for password: PasswordItem) {
         passwordListViewModel.toggleEncryption(for: password) { success in
             if success {
-                // Toggling will trigger a view update due to @Published properties in ViewModel
+                // View will update automatically due to @Published properties in ViewModel
             }
         }
-    }
-}
-
-struct PasswordListViewWrapper: View {
-    @StateObject private var passwordListViewModel = PasswordListViewModel()
-
-    var body: some View {
-        PasswordListView()
-            .environmentObject(passwordListViewModel)
-    }
-}
-
-struct PasswordListView_Previews: PreviewProvider {
-    static var previews: some View {
-        PasswordListViewWrapper()
     }
 }

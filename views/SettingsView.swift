@@ -88,7 +88,7 @@ struct SettingsView: View {
                 DocumentPicker(didPickDocuments: handleDocumentPicker)
             }
             .alert(isPresented: $showingSecretKeyAlert) {
-                Alert(title: Text("Important"), message: Text("Store this key in a very secret place just in case."), dismissButton: .default(Text("OK")))
+                Alert(title: Text("Important"), message: Text("Important: Keep Your NFC Key Safe Please make a secure copy of your NFC key. This key is essential for restoring your passwords in case your NFC card is lost. It is crucial to keep this key in a very secure and private location, accessible only to you. Treating this key with the utmost confidentiality ensures the security of your sensitive information."), dismissButton: .default(Text("OK")))
             }
         }
     

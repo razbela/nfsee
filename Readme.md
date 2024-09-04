@@ -52,6 +52,7 @@ vault server -dev -dev-listen-address="127.0.0.1:8200"
 
 if port is used :
 lsof -i :$(port_number)  
+- for example: lsof -i :8200
 kill -9 pid
 
 Copy Unseal Key & Root Token to .env file
@@ -182,4 +183,22 @@ These APIs are designed to handle high-load scenarios, ensuring that the app rem
 Vault API is integrated for secure management of secrets and keys used in the encryption processes.
 
 
+
+# Demo movie
+
+1. login admin admin
+2. face_id
+3. add password for facebook user1 colman.cs
+4. add password for google   user2 thisisthepassword1234
+5. add password for discord  user3 thisismaybethepassword1
+6. unlocks 2 passwords
+7. move them in the 2 way possible
+8. lock few of them again
+9. take the nfc key from settings
+10. export passwords to JSON
+11. remove all passwords
+12. exit the app 
+13. login
+14. import all passwords
+15. DONE
 

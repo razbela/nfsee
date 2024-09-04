@@ -8,6 +8,9 @@ class PasswordListViewModel: ObservableObject, PasswordListDelegate {
     @Published var passwordVisibility = [UUID: Bool]()
     private var nfcService = NFCService()
     private var encryptionService = EncryptionService()
+    @Published var remainingTime = [UUID: Int]()
+    private var timers = [UUID: Timer]()
+
 
     func loadPasswords() {
         NetworkService.shared.fetchPasswords { [weak self] passwords, errorMessage in
@@ -25,6 +28,13 @@ class PasswordListViewModel: ObservableObject, PasswordListDelegate {
             }
         }
     }
+    func setupTimers() {
+           passwords.forEach { password in
+               if password.isDecrypted {
+                   startTimer(for: password.id)
+               }
+           }
+       }
 
     func addPassword(_ password: PasswordItem) {
         startNFCSession(writing: false) { [weak self] keyData, _ in
@@ -95,25 +105,26 @@ class PasswordListViewModel: ObservableObject, PasswordListDelegate {
     func toggleEncryption(for password: PasswordItem, completion: @escaping (Bool) -> Void) {
         if password.isDecrypted {
             // Lock the password (Fetch the encrypted password from the local vault)
-            print("Fetching password with ID (to lock): \(password.id)") // Add this line
+            print("Fetching password with ID (to lock): \(password.id)")
             NetworkService.shared.fetchPassword(by: password.id) { [weak self] encryptedPassword, errorMessage in
                 DispatchQueue.main.async {
-                    if let encryptedPassword = encryptedPassword {
-                        if let index = self?.passwords.firstIndex(where: { $0.id == password.id }) {
-                            self?.passwords[index].password = encryptedPassword
-                            self?.passwords[index].isDecrypted = false
-                            self?.passwordVisibility[password.id] = false
-                        }
-                        completion(true)
-                    } else {
+                    guard let self = self, let encryptedPassword = encryptedPassword else {
                         self?.alertMessage = "Failed to lock password: \(errorMessage ?? "Unknown error")"
                         self?.showAlert = true
                         completion(false)
+                        return
                     }
+                    if let index = self.passwords.firstIndex(where: { $0.id == password.id }) {
+                        self.passwords[index].password = encryptedPassword
+                        self.passwords[index].isDecrypted = false
+                        self.passwordVisibility[password.id] = false
+                        self.clearTimer(for: password.id)
+                    }
+                    completion(true)
                 }
             }
         } else {
-            // Unlock the password (Decrypt it using the NFC session)
+            // Decrypt the password (Unlock it using the NFC session)
             startNFCSession(writing: false) { [weak self] keyData, _ in
                 guard let self = self, let keyData = keyData else {
                     DispatchQueue.main.async {
@@ -123,32 +134,56 @@ class PasswordListViewModel: ObservableObject, PasswordListDelegate {
                     }
                     return
                 }
-                print("Decrypting password with ID: \(password.id)") // Add this line
+                print("Decrypting password with ID: \(password.id)")
                 let key = SymmetricKey(data: keyData)
-                if let decryptedData = self.encryptionService.decrypt(data: Data(base64Encoded: password.password) ?? Data(), key: key) {
-                    if let decryptedPassword = String(data: decryptedData, encoding: .utf8) {
+                if let decryptedData = self.encryptionService.decrypt(data: Data(base64Encoded: password.password) ?? Data(), key: key),
+                   let decryptedPassword = String(data: decryptedData, encoding: .utf8) {
+                    DispatchQueue.main.async {
                         if let index = self.passwords.firstIndex(where: { $0.id == password.id }) {
                             self.passwords[index].password = decryptedPassword
                             self.passwords[index].isDecrypted = true
-                            self.passwordVisibility[password.id] = false // Set visibility to false when decrypted
+                            self.startTimer(for: password.id)
                         }
                         completion(true)
-                    } else {
-                        DispatchQueue.main.async {
-                            self.alertMessage = "Failed to decode decrypted password."
-                            self.showAlert = true
-                            completion(false)
-                        }
                     }
                 } else {
                     DispatchQueue.main.async {
-                        self.alertMessage = "Failed to decrypt password."
+                        self.alertMessage = "Failed to decode decrypted password."
                         self.showAlert = true
                         completion(false)
                     }
                 }
             }
         }
+    }
+
+    private func startTimer(for passwordId: UUID) {
+        clearTimer(for: passwordId)
+        remainingTime[passwordId] = 15  // Start with 15 seconds
+        timers[passwordId] = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] timer in
+            DispatchQueue.main.async {
+                guard let self = self else { return }
+                if let timeLeft = self.remainingTime[passwordId], timeLeft > 0 {
+                    self.remainingTime[passwordId] = timeLeft - 1
+                } else {
+                    timer.invalidate()
+                    self.remainingTime[passwordId] = nil
+                    // Directly use toggleEncryption to lock the password
+                    if let password = self.passwords.first(where: { $0.id == passwordId }) {
+                        if password.isDecrypted {  // Double check to ensure it's still decrypted before locking
+                            self.toggleEncryption(for: password) { success in
+                                // Handle post-lock actions here, if necessary
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private func clearTimer(for passwordId: UUID) {
+        timers[passwordId]?.invalidate()
+        timers.removeValue(forKey: passwordId)
     }
 
 

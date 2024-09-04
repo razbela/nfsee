@@ -76,24 +76,29 @@ struct LoginView: View {
     func authenticateWithFaceID() {
         let context = LAContext()
         var error: NSError?
-        
+
+        print("Attempting to authenticate with Face ID.")
         if context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error) {
             context.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, localizedReason: "Access requires authentication") { success, authenticationError in
                 DispatchQueue.main.async {
                     if success {
+                        print("Authentication successful.")
                         login()
                     } else {
+                        print("Authentication failed: \(authenticationError?.localizedDescription ?? "Unknown error")")
                         errorMessage = "Authentication failed: \(authenticationError?.localizedDescription ?? "Unknown error")"
                     }
                 }
             }
         } else {
+            print("Biometric authentication not available: \(error?.localizedDescription ?? "Unknown reason")")
             errorMessage = "Biometric authentication not available: \(error?.localizedDescription ?? "Unknown reason")"
         }
     }
 
-    func login() {
+func login() {
         guard !username.isEmpty, !password.isEmpty else {
+            print("Username or password not provided.")
             errorMessage = "Please enter both username and password."
             return
         }
@@ -102,14 +107,19 @@ struct LoginView: View {
         let ipAddress = Config.shared.serverIPAddress
         let port = Config.shared.serverPort
         
-        guard let url = URL(string: "http://\(ipAddress):\(port)/login") else { return }
-        
+        guard let url = URL(string: "http://\(ipAddress):\(port)/login") else {
+            print("Invalid URL.")
+            return
+        }
+
+        print("Attempting to login with URL: \(url)")
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         
         do {
             request.httpBody = try JSONSerialization.data(withJSONObject: loginData, options: [])
+            print("Login data serialized successfully.")
         } catch {
             print("Error serializing login data: \(error.localizedDescription)")
             return
@@ -119,23 +129,26 @@ struct LoginView: View {
             if let error = error {
                 print("Error during login: \(error.localizedDescription)")
                 DispatchQueue.main.async {
-                    errorMessage = "Error during login: \(error.localizedDescription)"
+                    self.errorMessage = "Error during login: \(error.localizedDescription)"
                 }
                 return
             }
             
             guard let data = data else {
+                print("No data received from server.")
                 DispatchQueue.main.async {
-                    errorMessage = "No data received from server."
+                    self.errorMessage = "No data received from server."
                 }
                 return
             }
             
+            print("Received data from server.")
             if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 {
                 do {
                     if let jsonResponse = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
                        let token = jsonResponse["access_token"] as? String,
                        let passwordsData = jsonResponse["passwords"] as? [[String: Any]] {
+                        print("Login successful, processing data.")
                         DispatchQueue.main.async {
                             UserDefaults.standard.set(token, forKey: "jwtToken")
                             self.isLoggedIn = true
@@ -153,13 +166,14 @@ struct LoginView: View {
                 } catch {
                     print("Error parsing JSON response: \(error.localizedDescription)")
                     DispatchQueue.main.async {
-                        errorMessage = "Error parsing response: \(error.localizedDescription)"
+                        self.errorMessage = "Error parsing response: \(error.localizedDescription)"
                     }
                 }
             } else {
                 if let httpResponse = response as? HTTPURLResponse {
+                    print("Login failed with status code: \(httpResponse.statusCode)")
                     DispatchQueue.main.async {
-                        errorMessage = "Login failed: \(HTTPURLResponse.localizedString(forStatusCode: httpResponse.statusCode))"
+                        self.errorMessage = "Login failed: \(HTTPURLResponse.localizedString(forStatusCode: httpResponse.statusCode))"
                     }
                 }
             }
@@ -184,4 +198,3 @@ struct LoginView_Previews: PreviewProvider {
         LoginViewWrapper()
     }
 }
-

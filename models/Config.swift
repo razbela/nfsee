@@ -3,8 +3,8 @@ import Foundation
 class Config {
     static let shared = Config()
     
-    private let ipAddressKey = "ServerIPAddress"
-    private let portKey = "ServerPort"
+    private let ipAddressKey = "serverIPAddress"
+    private let portKey = "serverPort"
     private let configFileName = "config"
     private let configFileExtension = "json"
     
@@ -23,10 +23,14 @@ class Config {
             if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: String] {
                 if let ipAddress = json[ipAddressKey] {
                     UserDefaults.standard.set(ipAddress, forKey: ipAddressKey)
+                    print("Loaded IP address: \(ipAddress)")
                 }
                 if let port = json[portKey] {
                     UserDefaults.standard.set(port, forKey: portKey)
+                    print("Loaded port: \(port)")
                 }
+            } else {
+                print("JSON structure is not as expected")
             }
         } catch {
             print("Error reading config file: \(error)")
